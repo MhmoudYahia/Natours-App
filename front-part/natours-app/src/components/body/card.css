@@ -1,0 +1,75 @@
+.card {
+  max-width: 370px;
+  background-color: white;
+  color: #6e6e6e;
+  border-radius: 7px;
+}
+.card-header {
+  position: relative;
+  height: 213px;
+}
+img {
+  width: -webkit-fill-available;
+}
+.tour-name {
+  position: absolute;
+  font-size: larger;
+  background-image: linear-gradient(
+    to bottom right,
+    rgba(125, 213, 111, 0.85),
+    rgba(40, 180, 135, 0.85)
+  );
+  right: 23px;
+  bottom: -4px;
+  padding: 13px;
+  z-index: 2;
+}
+.card-header::after {
+  content: "";
+  width: 0%;
+  display: block;
+  height: 0;
+  border-left: 370px solid transparent;
+  border-bottom: 50px solid white;
+  position: absolute;
+  bottom: 0;
+}
+.img-layout {
+  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
+  opacity: 0.7;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+}
+.card-data {
+  padding: 35px;
+}
+.card-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.card-details div {
+  flex-basis: 48%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-footer {
+  background-color: #f1f1f1;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.footer-data {
+  padding: 5px 35px;
+}
+.Body-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  background-color: #e8e8e8;
+  padding: 60px 25px;
+  justify-content: center;
+}
