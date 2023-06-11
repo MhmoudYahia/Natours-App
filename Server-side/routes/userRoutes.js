@@ -12,6 +12,10 @@ const {
   getAllUsers,
   updateMyData,
   deleteMe,
+  deleteUser,
+  updateUser,
+  getUser,
+  getMe,
 } = require('../controllers/userController');
 
 router.route('/signup').post(signup);
@@ -23,6 +27,7 @@ router.route('/updatePassword').patch(protect, updatePassword);
 
 router.route('/').get(getAllUsers);
 router.route('/updateMyData').patch(protect, updateMyData);
-router.route('/deleteMe').delete(protect,deleteMe);
+router.route('/deleteMe').delete(protect, deleteMe);
+router.route('/me').get(protect, getMe, getUser);
+router.route('/:id').delete(deleteUser).patch(updateUser).get(getUser);
 module.exports = router;
-

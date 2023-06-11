@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const User = require('./userModel');
 
 const tourSchema = new mongoose.Schema(
   {
@@ -75,12 +76,43 @@ const tourSchema = new mongoose.Schema(
     secretTour: {
       type: Boolean,
       default: false,
+      select: false,
     },
+    startLocation: {
+      // GeoJSON  The type and coordinates properties of the startLocation field are required for GeoJSON data to be valid,
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    guides: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-    strictQuery: true,
+    // strictQuery: true,
   }
 );
 // tourSchema.pre('save', function(next) {
@@ -93,6 +125,12 @@ const tourSchema = new mongoose.Schema(
 //   next();
 // });
 
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'tour',
+});
+
 // QUERY MIDDLEWARE
 tourSchema.pre(/^find/, (next) => {
   // this.find({ secretTour: { $ne: true } });
@@ -104,9 +142,24 @@ tourSchema.post(/^find/, (req, res, next) => {
   next();
 });
 
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -role',
+  });
+  next();
+});
+
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromises = this.guides.map(async (id) => await User.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
+
+//   next();
+// });
+
 //AGGREGATION MIDDLEWARE
 //You get an error because the arrow function changes the scope of 'this.' Just use
-tourSchema.pre('aggregate', function(next){
+tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
   // console.log('aggregation pipeline is', this.pipeline());
 

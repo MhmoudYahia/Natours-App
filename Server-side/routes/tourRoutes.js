@@ -10,7 +10,10 @@ const {
   getMonthlyPlan,
 } = require('../controllers/tourController');
 const authController = require('../controllers/authController');
+const reviewRouter = require('./reviewRoutes');
+
 const router = express.Router();
+router.use('/:tourId/reviews', reviewRouter);
 
 router.route('/').get(authController.protect, getAllTours).post(createTour);
 router.route('/tour-stats').get(getTourStats);
