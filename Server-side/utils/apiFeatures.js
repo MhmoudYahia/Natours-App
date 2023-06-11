@@ -5,21 +5,13 @@ class APIFeatures {
   }
 
   filter() {
-    //     //
-    // Excluding fields does not appear to be necessary in latest Mongoose version.
-    // 38 upvotes
-    // Joel · Lecture 95 · 1 year ago
-    // In Mongoose version 6, the documentation indicates that by default, Mongoose does not cast filter properties that aren't in your schema. So it is not necessary to create queryObj and delete 'page', 'sort', 'limit', and 'fields'.
-    //     //
-
-    // const queryObj = { ...this.queryString };
-    // const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    // excludedFields.forEach((el) => delete queryObj[el]);
+    const queryObj = { ...this.queryString };
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
 
     // 1B) Advanced filtering
-    let queryStr = JSON.stringify(this.queryString);
+    let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-
     this.query = this.query.find(JSON.parse(queryStr));
 
     return this;
@@ -32,7 +24,6 @@ class APIFeatures {
     } else {
       this.query = this.query.sort('-createdAt');
     }
-
     return this;
   }
 
