@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const reviewSchema = new mongoose.Schema(
   {
-    reviewText: {
+    review: {
       type: String,
       required: [true, 'Review Body is reqired'],
       trim: true,
     },
-    reting: {
+    rating: {
       type: Number,
       default: 0,
       min: 0,

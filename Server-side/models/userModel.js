@@ -56,30 +56,30 @@ const userSchema = new mongoose.Schema({
   passwordResetToken: String,
 });
 //You get an error because the arrow function changes the scope of 'this.' Just use
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+// userSchema.pre('save', async function (next) {
+//   if (!this.isModified('password')) return next();
 
-  // Hash the password with cost of 12
-  this.password = await bcrypt.hash(this.password, 12);
+//   // Hash the password with cost of 12
+//   this.password = await bcrypt.hash(this.password, 12);
 
-  // Delete passwordConfirm field
-  this.passwordConfirm = undefined;
-  next();
-});
+//   // Delete passwordConfirm field
+//   this.passwordConfirm = undefined;
+//   next();
+// });
 
-userSchema.pre('save',function(next){
-if(!this.isModified('password')||this.isNew)return next();
+// userSchema.pre('save',function(next){
+// if(!this.isModified('password')||this.isNew)return next();
 
-  this.passwordChangedAt = Date.now() - 1000;
-  next();
-});
+//   this.passwordChangedAt = Date.now() - 1000;
+//   next();
+// });
 
-userSchema.methods.checkCorrectPassword = async function (
-  candidatePassword,
-  userPassword
-) {
-  return await bcrypt.compare(candidatePassword, userPassword);
-};
+// userSchema.methods.checkCorrectPassword = async function (
+//   candidatePassword,
+//   userPassword
+// ) {
+//   return await bcrypt.compare(candidatePassword, userPassword);
+// };
 userSchema.pre(/^find/,function(next){
   this.find({ active: { $ne: false } });
   next();
