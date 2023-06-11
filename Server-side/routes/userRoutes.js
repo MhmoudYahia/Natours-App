@@ -7,6 +7,7 @@ const {
   resetPassword,
   updatePassword,
   protect,
+  strictTo,
 } = require('../controllers/authController');
 const {
   getAllUsers,
@@ -16,18 +17,25 @@ const {
   updateUser,
   getUser,
   getMe,
+  creatUser,
+
 } = require('../controllers/userController');
 
 router.route('/signup').post(signup);
 router.route('/login').post(login);
-
 router.route('/forgetPassword').post(forgetPassword);
 router.route('/resetPassword/:token').patch(resetPassword);
-router.route('/updatePassword').patch(protect, updatePassword);
 
-router.route('/').get(getAllUsers);
-router.route('/updateMyData').patch(protect, updateMyData);
-router.route('/deleteMe').delete(protect, deleteMe);
-router.route('/me').get(protect, getMe, getUser);
+// Protect all routes after this middleware
+router.use(protect);
+
+router.route('/updatePassword').patch(updatePassword);
+router.route('/me').get(getMe, getUser);
+router.route('/updateMyData').patch(updateMyData);
+router.route('/deleteMe').delete(deleteMe);
+
+router.use(strictTo('admin'));
+
+router.route('/').get(getAllUsers).post(creatUser);
 router.route('/:id').delete(deleteUser).patch(updateUser).get(getUser);
 module.exports = router;

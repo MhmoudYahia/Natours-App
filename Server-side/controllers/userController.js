@@ -55,3 +55,4 @@ exports.getAllUsers = factory.getAll(User);
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
 exports.getUser = factory.getOne(User);
+exports.creatUser = factory.createOne(User);

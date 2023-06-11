@@ -15,14 +15,33 @@ const reviewRouter = require('./reviewRoutes');
 const router = express.Router();
 router.use('/:tourId/reviews', reviewRouter);
 
-router.route('/').get(authController.protect, getAllTours).post(createTour);
 router.route('/tour-stats').get(getTourStats);
-router.route('/monthly-plan/:year').get(getMonthlyPlan);
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
+
+router
+  .route('/')
+  .get(getAllTours)
+  .post(
+    authController.protect,
+    authController.strictTo('admin', 'lead-guide'),
+    createTour
+  );
+router
+  .route(
+    authController.protect,
+    authController.strictTo('admin', 'guide', 'lead-guide'),
+    '/monthly-plan/:year'
+  )
+  .get(getMonthlyPlan);
+
 router
   .route('/:id')
   .get(getTour)
-  .patch(updateTour)
+  .patch(
+    authController.protect,
+    authController.strictTo('admin', 'lead-guide'),
+    updateTour
+  )
   .delete(
     authController.protect,
     authController.strictTo('admin', 'lead-guide'),

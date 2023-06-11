@@ -4,6 +4,8 @@ const authController = require('../controllers/authController');
 
 const router = express.Router({ mergeParams: true }); //When mergeParams is set to true, route parameters defined in the parent router will be merged with those defined in the child router.
 
+router.use(authController.protect);
+
 router.get('/', revController.getAllReviews);
 router.post(
   '/addreview',
@@ -15,6 +17,6 @@ router.post(
 router
   .route('/:id')
   .get(revController.getReview)
-  .delete(revController.deleteReview)
-  .patch(revController.updateReview);
+  .delete(authController.strictTo('user', 'admin'), revController.deleteReview)
+  .patch(authController.strictTo('user', 'admin'), revController.updateReview);
 module.exports = router;
