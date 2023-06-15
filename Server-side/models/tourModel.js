@@ -137,6 +137,10 @@ tourSchema.pre(/^find/, (next) => {
   this.start = Date.now();
   next();
 });
+
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+
 tourSchema.post(/^find/, (req, res, next) => {
   console.log(`Query took ${Date.now() - this.start} ms`);
   next();
