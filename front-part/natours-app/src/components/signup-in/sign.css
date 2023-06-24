@@ -13,15 +13,16 @@ form.signup {
   padding: 35px;
   text-align: center;
   border-radius: 12px;
+  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
 }
-form button {
+.layout form button {
   width: 152px;
   align-self: center;
 }
 .layout {
-  height: 80vh;
-  background-color: #d8ffec;
+  height: 90vh;
+  background-color: #007474;
 }
-h2 {
+.layout h2 {
   color: brown;
 }

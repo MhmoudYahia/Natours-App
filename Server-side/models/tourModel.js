@@ -165,12 +165,12 @@ tourSchema.pre(/^find/, function (next) {
 
 //AGGREGATION MIDDLEWARE
 //You get an error because the arrow function changes the scope of 'this.' Just use
-tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  // console.log('aggregation pipeline is', this.pipeline());
+// tourSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   // console.log('aggregation pipeline is', this.pipeline());
 
-  next();
-});
+//   next();
+// });
 
 const Tour = mongoose.model('Tour', tourSchema);
 module.exports = Tour;

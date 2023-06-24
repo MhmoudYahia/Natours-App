@@ -3,29 +3,79 @@
   margin: 20px;
 }
 body {
-  background-color: #727272;
+  background-color: #29b9ab;
 }
 * {
   font-family: "Nunito Sans", sans-serif;
 }
 .link {
   text-decoration: none !important;
+  transition: 0.3s ease-in;
+}
+.link:active {
+  color: #6cdc95;
 }
 .Button {
   border-radius: 30px !important;
   font-weight: 600 !important;
-      background-color: #6cdc95 !important;
+  background-color: #6cdc95 !important;
 }
 .Button:hover {
   background-color: cadetblue !important;
   color: blue;
-  transform:  scale(1.05) !important;
+  transform: scale(1.05) !important;
   transition: 0.3s;
 }
-
+.icon {
+  margin-right: 10px;
+  color: darkcyan;
+}
 @keyframes App-logo-spin {
   from {
   }
   to {
   }
+}
+
+/*======================
+    404 page
+=======================*/
+
+.page_404 {
+  padding: 40px 0;
+  background: #fff;
+  font-family: "Arvo", serif;
+}
+
+.page_404 img {
+  width: 100%;
+}
+
+.four_zero_four_bg {
+  background-image: url(https://cdn.dribbble.com/users/722246/screenshots/3066818/404-page.gif);
+  height: 650px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.four_zero_four_bg h1 {
+  font-size: 80px;
+}
+
+.four_zero_four_bg h3 {
+  font-size: 80px;
+}
+
+.link_404 {
+  color: #fff !important;
+  padding: 10px 20px;
+  background: #39ac31;
+  margin: 20px 0;
+  border-radius: 10px;
+  box-shadow: 0px 1px 2px black;
+  display: inline-block;
+}
+.contant_box_404 {
+  margin-top: -50px;
+  text-align: center;
 }

@@ -37,6 +37,7 @@ exports.updateMyData = catchAsync(async (req, res, next) => {
   });
 });
 
+//Noe I Authorized
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
   next();
@@ -48,6 +49,18 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: null,
+  });
+});
+
+// sessoin auth method
+exports.getCurrentAuthUser = catchAsync(async (req, res) => {
+  const currU = req.session.user;
+  const isAuth = req.session.isAuth;
+
+  res.status(200).json({
+    status: 'success',
+    user: { currU },
+    isAuth,
   });
 });
 

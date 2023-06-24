@@ -5,6 +5,7 @@ const appError = require('../utils/appError');
 const sendEmail = require('../utils/email');
 const { promisify } = require('util');
 const crypto = require('crypto');
+const { log } = require('console');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -15,18 +16,22 @@ const createSendToken = (user, statusCode, res) => {
   const authToken = signToken(user._id);
 
   const cookiesOptions = {
-    expires: new Date(
+    maxAge: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRESIN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
+    // secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   };
   if (process.env.NODE_ENV == 'production') cookiesOptions.secure = true;
   res.cookie('jwt', authToken, cookiesOptions);
 
+  // req.session.user = user;
+  // req.session.isAuth = true;
+  // console.log(req.session);
+
   res.status(statusCode).json({
     status: 'success',
     token: authToken,
-    message: 'token added to cookies',
   });
 };
 exports.signup = catchAsync(async (req, res) => {
@@ -57,6 +62,9 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!(await user.checkCorrectPassword(password, user.password)))
     return next(new appError('wrong password', 401));
 
+  req.session.user = user;
+  req.session.isAuth = true;
+
   createSendToken(user, 200, res);
 });
 
@@ -68,6 +76,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
   if (!token) {
     return next(new appError('You Are Not Logged In', 401));
@@ -79,7 +89,10 @@ exports.protect = catchAsync(async (req, res, next) => {
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
     return next(
-     new appError('The User belonging to this token does no longer exist.', 401)
+      new appError(
+        'The User belonging to this token does no longer exist.',
+        401
+      )
     );
   }
 
@@ -93,6 +106,49 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
+// also if not authed
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      // 1) verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      // 2) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        res.status(401).json({
+          status: 'faild',
+          message: 'user does not still exists',
+        });
+      }
+
+      // 3) Check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        res.status(401).json({
+          status: 'faild',
+          message: 'user changed password after the token was issued',
+        });
+      }
+
+      // THERE IS A LOGGED IN USER
+      res.status(200).json({
+        status: 'success',
+        user: { currentUser },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  } else {
+    res.status(401).json({
+      status: 'faild',
+      message: 'No Authed User',
+    });
+  }
+};
 
 exports.strictTo = (...roles) => {
   return (req, res, next) => {

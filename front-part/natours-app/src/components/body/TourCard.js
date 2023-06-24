@@ -1,5 +1,5 @@
 import React from "react";
-import "./card.css";
+import "./Card.css";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import TourIcon from "@mui/icons-material/Tour";
 import WorkIcon from "@mui/icons-material/Work";
@@ -7,55 +7,63 @@ import PeopleIcon from "@mui/icons-material/People";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 
-export const TourCard = () => {
+export const TourCard = ({ tour }) => {
   return (
     <div className="card">
       <div className="card-header">
         <div className="img-layout"></div>
         <div className="image">
-          <img
-            src="https://www.natours.dev/img/tours/tour-5-cover.jpg"
-            alt=""
-          />
+          <img src={`/img/tours/${tour.imageCover}`} alt="" />
         </div>
-        <div className="text-img tour-name">Forest gggggg</div>
+        <div className="text-img tour-name">{tour.name}</div>
       </div>
       <div className="card-data">
-        <p style={{ fontWeight: 700 }}>EASY 5-DAY TOUR</p>
-        <p>Breathtaking hike through the Canadian Banff National Park</p>
+        <p style={{ fontWeight: 700,textTransform:'uppercase' }}>
+          {` ${tour.difficulty} ${tour.duration}-DAY TOUR`}
+        </p>
+        <p>{tour.summary}</p>
         <div className="card-details">
           <div>
             <LocationOnIcon style={{ color: "rgba(40, 180, 135, 0.85)" }} />
 
-            <span>Misr</span>
+            <span>{tour.startLocation.description}</span>
           </div>
           <div>
             <PeopleIcon style={{ color: "rgba(40, 180, 135, 0.85)" }} />
-            <span>15</span>
+            <span>{tour.maxGroupSize}</span>
             <span> People</span>
           </div>
           <div>
             <TourIcon style={{ color: "rgba(40, 180, 135, 0.85)" }} />
-            <span>5</span>
+            <span>{tour.locations.length}</span>
             <span> stops</span>
           </div>
           <div>
             <WorkIcon style={{ color: "rgba(40, 180, 135, 0.85)" }} />
-            <span>April 2021</span>
+            <span>
+              {new Date(tour.startDates[0]).toLocaleString("en-us", {
+                month: "long",
+                year: "numeric",
+              })
+              }
+            </span>
           </div>
         </div>
       </div>
       <div className="card-footer">
         <div className="footer-data">
           <p>
-            <span>$522 </span>Per Person
+            <span style={{ fontWeight: "bold" }}>{`$${tour.price}`}</span> Per
+            Person
           </p>
           <p>
-            <span>4.8</span> rating<span>(11)</span>
+            <span style={{ fontWeight: "bold" }}>{tour.ratingsAverage}</span>{" "}
+            rating
+            <span >{`(${tour.ratingsQuantity})`}</span>
           </p>
         </div>
         <div>
-          <Link to="/tour" className="link">
+          <Link to={`/tour/${tour._id}`} className="link">
             {" "}
             <Button className="Button" variant="outlined">
               Details

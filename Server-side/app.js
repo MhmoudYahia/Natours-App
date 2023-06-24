@@ -6,6 +6,8 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -25,10 +27,46 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+//headers
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Methods',
+    'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+  );
+  res.header('Access-Control-Allow-Headers', '*');
+  next();
+});
+
+//sessions
+const DBString = process.env.DATABASE.replace(
+  '<password>',
+  process.env.PASSWORD
+);
+
+const store = new MongoDBStore({
+  uri: DBString,
+  collection: 'sessions',
+});
+
+store.on('error', function (error) {
+  console.log(error);
+});
+
+app.use(
+  session({
+    secret: 'my_secret_key',
+    resave: false,
+    saveUninitialized: true,
+    store: store,
+  })
+);
+
 // Body parser, reading data from body into req.body
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize()); //mongoSanitize is a middleware function for Node.js web applications that helps prevent MongoDB operator injection attacks by removing any keys that start with $ or contain a . in the request body, request query parameters, and request params.
@@ -50,8 +88,6 @@ app.use(
   })
 );
 
-app.use(cookieParser());
-
 // Limit requests from same API
 const limiter = rateLimit({
   max: 100,
@@ -61,14 +97,17 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 const cors = require('cors');
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 
 // Serving static files
 app.use(express.static('../front-part'));
 
 app.use((req, res, next) => {
-  console.log(req.body);
   req.requestTime = new Date().toISOString();
+  // res.locals.jwt = req.cookies.jwt;
+  // console.log(res.locals.jwt);
+  // req.session.isAuth = true;
+  // console.log(req.session);
   next();
 });
 
@@ -80,7 +119,14 @@ app.use('/api/v1/reviews', reviewRouter);
 app.all('*', (req, res, next) => {
   next(new appError(`Cant find ${req.originalUrl} on this server!`, 404));
 });
-
+// app.use((req, res, next) => {
+//   req.requestTime = new Date().toISOString();
+//   res.json({user: req.session.user});
+//   // console.log(res.locals);
+//   // req.session.isAuth = true;
+//   console.log(req.session);
+//   next();
+// });
 app.use(globalErrorHandler);
 
 module.exports = app;

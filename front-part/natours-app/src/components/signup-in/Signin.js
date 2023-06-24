@@ -3,7 +3,9 @@ import "./sign.css";
 import MailIcon from "@mui/icons-material/Mail";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosWrapper from "../utils/axiosWrapper";
+
 
 export const Signin = () => {
   const [email, setEmail] = React.useState("");
@@ -27,9 +29,22 @@ export const Signin = () => {
     setPass(e.target.value);
   };
 
-  const handelSubmitted = (e) => {
-    console.log("submited");
+  const handelSubmitted = async (e) => {
+    console.log(email, pass);
+    try {
+      const { token } = await axiosWrapper.post("/users/login", {
+        email,
+        password: pass,
+      });
+      // setEmail("");
+      // setPass("");
+      console.log(token);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  // request
+
   return (
     <div className="layout">
       <form className="signin" onSubmit={handelSubmitted}>
@@ -49,10 +64,10 @@ export const Signin = () => {
           value={pass}
           onChange={handleChangePass}
         />
-        <Button className="Button" variant="outlined">
+        <Button className="Button" variant="outlined" onClick={handelSubmitted}>
           SIGN IN
         </Button>
-        <Link to='/signup'>
+        <Link to="/signup">
           <p>Need Account?</p>
         </Link>
         {error && <h2 style={{ color: "red" }}>{error}</h2>}

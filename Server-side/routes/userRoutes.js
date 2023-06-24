@@ -8,6 +8,7 @@ const {
   updatePassword,
   protect,
   strictTo,
+  isLoggedIn
 } = require('../controllers/authController');
 const {
   getAllUsers,
@@ -18,13 +19,13 @@ const {
   getUser,
   getMe,
   creatUser,
-
 } = require('../controllers/userController');
 
 router.route('/signup').post(signup);
 router.route('/login').post(login);
 router.route('/forgetPassword').post(forgetPassword);
 router.route('/resetPassword/:token').patch(resetPassword);
+router.route('/isLoggedIn').get(isLoggedIn);
 
 // Protect all routes after this middleware
 router.use(protect);

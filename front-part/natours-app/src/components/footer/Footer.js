@@ -4,7 +4,7 @@ import "./footer.modul.css";
 export const Footer = () => {
   return (
     <footer>
-      <SailingIcon style={{ color: "#ffc100" }} />
+     <img src="/img/logo-green.png" alt="" />
       <span> &copy; Created By Mahmoud Yahia</span>
     </footer>
   );

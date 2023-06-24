@@ -2,8 +2,12 @@ footer {
   background-color: #338f8f;
   padding: 15px 20px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 3px;
   font-weight: 800;
   border-radius: 0 0 7px 7px;
+  align-items: center;
+}
+footer img {
+  width: 9rem;
 }
