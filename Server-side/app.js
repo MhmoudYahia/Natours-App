@@ -38,7 +38,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-//sessions
+//sessions  ======================== this part for ref only (0no need)==========================================
 const DBString = process.env.DATABASE.replace(
   '<password>',
   process.env.PASSWORD
@@ -58,9 +58,11 @@ app.use(
     secret: 'my_secret_key',
     resave: false,
     saveUninitialized: true,
-    store: store,
+    // store: store,
   })
 );
+// ===================================================================================
+
 
 // Body parser, reading data from body into req.body
 const bodyParser = require('body-parser');

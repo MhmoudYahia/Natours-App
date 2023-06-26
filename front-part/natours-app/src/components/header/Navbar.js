@@ -1,6 +1,6 @@
 import React from "react";
 import "./nav.modul.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -8,15 +8,28 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import SailingIcon from "@mui/icons-material/Sailing";
 import axiosWrapper from "../utils/axiosWrapper";
 import Avatar from "@mui/material/Avatar";
+import Alert from "../utils/alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 export const Navbar = () => {
-  const [user, setUser] = React.useState({});
+  const navigate = useNavigate();
+  const [user, setUser] = React.useState(null);
+  const [showAlert, setShowAlert] = React.useState(false);
+  const [alertInfo, setAlertInfo] = React.useState({});
 
   const fetchData = async () => {
     try {
-      const { status, user } = await axiosWrapper.get("/users/isLoggedIn");
-      if (status === "success") {
-        setUser(user.currentUser);
+      const res = await axiosWrapper.get("/users/isLoggedIn");
+      if (res.status === "success") {
+        setUser(res.user.currentUser);
+        setShowAlert(true);
+        setAlertInfo({
+          severity: "success",
+          title: "Logged in successfully",
+          message: "Welcome! You are now logged in",
+        });
+      } else {
+        setUser(null);
       }
     } catch (error) {
       console.log(error);
@@ -27,6 +40,32 @@ export const Navbar = () => {
     fetchData();
   }, []);
 
+  if (showAlert) {
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 5000);
+  }
+
+  const handleLogout = async () => {
+    try {
+      const { status } = await axiosWrapper.get("/users/logout");
+      if (status === "success") {
+        setUser(null);
+
+        setAlertInfo({
+          severity: "warning",
+          title: "LOGGING OUT",
+          message: "You are about to Logged Out",
+        });
+        setShowAlert(true);
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 5000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <nav className="navbar">
       <div className="logo">
@@ -35,6 +74,13 @@ export const Navbar = () => {
           <div>All Tours</div>
         </Link>
       </div>
+      {showAlert && (
+        <Alert
+          severity={alertInfo.severity}
+          title={alertInfo.title}
+          message={alertInfo.message}
+        />
+      )}
       <div className="navlinks">
         {!user && (
           <Link to="/signin" className="link">
@@ -58,7 +104,16 @@ export const Navbar = () => {
             </Button>
           </Link>
         )}
-
+        {user && (
+          <Button
+            onClick={handleLogout}
+            variant="contained"
+            className="Button"
+            endIcon={<LogoutIcon />}
+          >
+            LOG OUT
+          </Button>
+        )}
         {user && (
           <Link
             to="/userpage"
@@ -72,29 +127,10 @@ export const Navbar = () => {
           >
             <span id="userName">{user.name}</span>
             {
-              <Avatar
-                alt={user.name}
-                src={`/img/users/${user.photo}`}
-                style={
-                  {
-                    // padding: "5px",
-                  }
-                }
-              >
-                {user.name}
-              </Avatar>
+              <div className="guide-profile">
+                <img src={`/img/users/${user.photo}`} alt="" />
+              </div>
             }{" "}
-          </Link>
-        )}
-        {user && (
-          <Link to="/logout" className="link">
-            <Button
-              variant="contained"
-              className="Button"
-              endIcon={<LogoutIcon />}
-            >
-              LOG OUT
-            </Button>
           </Link>
         )}
       </div>

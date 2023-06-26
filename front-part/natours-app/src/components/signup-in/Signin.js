@@ -6,8 +6,8 @@ import TextField from "@mui/material/TextField";
 import { Link, useNavigate } from "react-router-dom";
 import axiosWrapper from "../utils/axiosWrapper";
 
-
 export const Signin = () => {
+  const his = useNavigate();
   const [email, setEmail] = React.useState("");
   const [pass, setPass] = React.useState("");
   const [error, setError] = React.useState(null);
@@ -36,8 +36,11 @@ export const Signin = () => {
         email,
         password: pass,
       });
-      // setEmail("");
-      // setPass("");
+      setEmail("");
+      setPass("");
+
+      his("/");
+      window.location.reload();
       console.log(token);
     } catch (error) {
       console.log(error);

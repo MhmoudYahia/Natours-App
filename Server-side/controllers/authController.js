@@ -16,10 +16,10 @@ const createSendToken = (user, statusCode, res) => {
   const authToken = signToken(user._id);
 
   const cookiesOptions = {
-    maxAge: new Date(
+    expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRESIN * 24 * 60 * 60 * 1000
     ),
-    httpOnly: true,
+    httpOnly: true, //httpOnly is a property that can be set on cookies to prevent client-side JavaScript from accessing them. This is a security measure that helps prevent cross-site scripting (XSS) attacks, as it prevents malicious scripts from stealing or modifying the user's session cookies.
     // secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   };
   if (process.env.NODE_ENV == 'production') cookiesOptions.secure = true;
@@ -68,6 +68,15 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+exports.logout = catchAsync(async (req, res, next) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 0 * 1000),
+    httpOnly: true,
+  });
+  // res.clearCookie('token', { httpOnly: true });
+  res.status(200).json({ status: 'success' });
+});
+
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;
@@ -79,6 +88,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
+
   if (!token) {
     return next(new appError('You Are Not Logged In', 401));
   }

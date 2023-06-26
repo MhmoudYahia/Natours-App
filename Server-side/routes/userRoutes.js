@@ -8,7 +8,8 @@ const {
   updatePassword,
   protect,
   strictTo,
-  isLoggedIn
+  isLoggedIn,
+  logout
 } = require('../controllers/authController');
 const {
   getAllUsers,
@@ -23,6 +24,7 @@ const {
 
 router.route('/signup').post(signup);
 router.route('/login').post(login);
+router.route('/logout').get(logout);
 router.route('/forgetPassword').post(forgetPassword);
 router.route('/resetPassword/:token').patch(resetPassword);
 router.route('/isLoggedIn').get(isLoggedIn);
