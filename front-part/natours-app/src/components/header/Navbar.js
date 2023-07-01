@@ -22,12 +22,12 @@ export const Navbar = () => {
       const res = await axiosWrapper.get("/users/isLoggedIn");
       if (res.status === "success") {
         setUser(res.user.currentUser);
-        setShowAlert(true);
         setAlertInfo({
           severity: "success",
           title: "Logged in successfully",
           message: "Welcome! You are now logged in",
         });
+        setShowAlert(true);
       } else {
         setUser(null);
       }
@@ -43,7 +43,7 @@ export const Navbar = () => {
   if (showAlert) {
     setTimeout(() => {
       setShowAlert(false);
-    }, 5000);
+    }, 3000);
   }
 
   const handleLogout = async () => {
@@ -51,7 +51,6 @@ export const Navbar = () => {
       const { status } = await axiosWrapper.get("/users/logout");
       if (status === "success") {
         setUser(null);
-
         setAlertInfo({
           severity: "warning",
           title: "LOGGING OUT",
@@ -59,8 +58,9 @@ export const Navbar = () => {
         });
         setShowAlert(true);
         setTimeout(() => {
+          navigate("/");
           window.location.reload(true);
-        }, 5000);
+        }, 3000);
       }
     } catch (error) {
       console.log(error);
@@ -116,7 +116,7 @@ export const Navbar = () => {
         )}
         {user && (
           <Link
-            to="/userpage"
+            to="/me"
             style={{
               display: "flex",
               "align-items": "center",

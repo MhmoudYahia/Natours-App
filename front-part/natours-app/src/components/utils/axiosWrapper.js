@@ -26,6 +26,6 @@ const request = async (method, url, data, headers) => {
 export default {
   get: (url, headers) => request("get", url, null, headers),
   post: (url, data, headers) => request("post", url, data, headers),
-  put: (url, data, headers) => request("put", url, data, headers),
+  patch: (url, data, headers) => request("patch", url, data, headers),
   delete: (url, headers) => request("delete", url, null, headers),
 };

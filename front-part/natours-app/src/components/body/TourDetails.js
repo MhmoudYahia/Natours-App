@@ -64,6 +64,13 @@ export const TourDetails = () => {
         color="#0000FF"
         height={100}
         width={50}
+        style={{
+          height: "50vh",
+          width: "100px",
+          margin: "auto",
+          /* margin-top: 69px; */
+          display: "flex",
+        }}
       />
     );
   }

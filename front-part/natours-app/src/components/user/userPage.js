@@ -1,14 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./userPage.css";
 import SideBar from "./SideBar";
+import axiosWrapper from "../utils/axiosWrapper";
+import ErrorPage from "../error/ErrorPage";
+import Alert from "../utils/alert";
+import { fetchWrapper } from "../utils/fetchWrapper";
 
 export const UserPage = () => {
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("johndoe@example.com");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [photo, setPhoto] = useState(null);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("");
+  const [alertInfo, setAlertInfo] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
+
+  const getUserData = async () => {
+    const { data, status, message } = await axiosWrapper.get("users/me");
+    if (status === "success") {
+      const user = data.doc;
+      setName(user.name);
+      setPhoto(user.photo);
+      setEmail(user.email);
+      setRole(user.role);
+    } else {
+      return <ErrorPage errorMessage={message} />;
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -35,17 +59,60 @@ export const UserPage = () => {
     setConfirmPassword(event.target.value);
   };
 
-  const handleSaveChanges = () => {
-    // TODO: Implement save changes functionality
+  if (showAlert) {
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+  }
+
+  const handleSaveChanges = async () => {
+    try {
+      const res1 = await fetch(
+        "http://localhost:1444/api/v1/users/updateMyData",
+        { credentials: "include", withCredentials: true }
+      );
+      const { message, status, data } = await res1.json();
+
+      if (status === "success") {
+        setAlertInfo({
+          severity: "success",
+          title: "Message",
+          message: "Your Data has been Updated successfully",
+        });
+        setShowAlert(true);
+      } else {
+        setAlertInfo({
+          severity: "error",
+          title: "try again",
+          message,
+        });
+        setShowAlert(true);
+      }
+      // console.log(data.updatedUser);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handlePasswordChange = () => {
-    // TODO: Implement password change functionality
+    const { message, data, status, loading } = fetchWrapper(
+      "/users/updatePassword",
+      "PATCH",
+      { newPassword, currentPassword, confirmPassword }
+    );
+    console.log(message, data, status, loading);
   };
 
   return (
     <div className="account-settings-container">
-      <SideBar />
+      <SideBar role={role} />{" "}
+      {showAlert && (
+        <Alert
+          severity={alertInfo.severity}
+          title={alertInfo.title}
+          message={alertInfo.message}
+        />
+      )}
       <div className="account-settings-user-page">
         <h2>Your Account Settings</h2>
         <form className="account-settings-form">
@@ -68,6 +135,11 @@ export const UserPage = () => {
             />
           </div>
           <div className="form-group">
+            {photo && (
+              <div className="guide-profile">
+                <img src={`/img/users/${photo}`} alt="" />
+              </div>
+            )}
             <label class="choose_file">
               Choose New Photo
               <input
@@ -79,13 +151,6 @@ export const UserPage = () => {
                 style={{ display: "none" }}
               />
             </label>
-            {photo && (
-              <img
-                src={URL.createObjectURL(photo)}
-                alt="Profile"
-                className="profile-photo"
-              />
-            )}
             <button type="button" onClick={handleSaveChanges}>
               Save Changes
             </button>

@@ -10,7 +10,7 @@ import { Footer } from "./components/footer/Footer";
 import { BodyTours } from "./components/body/BodyTours";
 import { Signin } from "./components/signup-in/Signin";
 import { Signup } from "./components/signup-in/Signup";
-import { UserPage } from "./components/user/userPage";
+import { UserPage } from "./components/user/UserPage";
 import { TourDetails } from "./components/body/TourDetails";
 import { Page404 } from "./components/error/Page404";
 

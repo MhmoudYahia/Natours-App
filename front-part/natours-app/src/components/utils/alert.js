@@ -6,8 +6,14 @@ const MyAlert = ({ severity, title, message }) => {
   return (
     <div className="alert">
       <Alert severity={severity}>
-        {title && <AlertTitle>{title}</AlertTitle>}
-        {message}
+        {title && (
+          <AlertTitle style={{ fontWeight: 800, textTransform: "uppercase" }}>
+            {title}
+          </AlertTitle>
+        )}
+        <div style={{ fontWeight: 900, textTransform: "capitalize" }}>
+          {message}
+        </div>
       </Alert>
     </div>
   );

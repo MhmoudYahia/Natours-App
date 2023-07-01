@@ -4,6 +4,10 @@ import MailIcon from "@mui/icons-material/Mail";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export const Signup = () => {
   const [email, setEmail] = React.useState("");
@@ -12,6 +16,8 @@ export const Signup = () => {
   const [error, setError] = React.useState(null);
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
+  const [showPass1, setShowPass1] = React.useState(false);
+  const [showPass2, setShowPass2] = React.useState(false);
 
   function isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
@@ -26,7 +32,13 @@ export const Signup = () => {
 
     setEmail(event.target.value);
   };
-  const handleChangePass = (e) => {
+  const handleToggleShowPass1 = () => {
+    setShowPass1(!showPass1);
+  };
+  const handleToggleShowPass2 = () => {
+    setShowPass2(!showPass2);
+  };
+  const handleChangePass1 = (e) => {
     setPass(e.target.value);
   };
   const handleChangePass2 = (e) => {
@@ -69,17 +81,45 @@ export const Signup = () => {
         />
         <TextField
           helperText="Please enter your Password"
-          id="demo-helper-text-aligned"
+          id="pass"
           label="Password"
+          type={showPass1 ? "text" : "password"}
           value={pass}
-          onChange={handleChangePass}
+          onChange={handleChangePass1}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleToggleShowPass1}
+                  edge="end"
+                  style={{ width: "50px" }}
+                >
+                  {showPass1 ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           helperText="Please confirm your Password"
-          id="demo-helper-text-aligned"
+          id="pass"
           label="Password"
+          type={showPass2 ? "text" : "password"}
           value={pass2}
           onChange={handleChangePass2}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleToggleShowPass2}
+                  edge="end"
+                  style={{ width: "50px" }}
+                >
+                  {showPass2 ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <Button className="Button" variant="outlined">
           Submit

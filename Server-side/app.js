@@ -35,6 +35,7 @@ app.use(function (req, res, next) {
     'GET, POST, OPTIONS, PUT, PATCH, DELETE'
   );
   res.header('Access-Control-Allow-Headers', '*');
+  res.header('Access-Control-Allow-Credentials', true);
   next();
 });
 
@@ -62,7 +63,6 @@ app.use(
   })
 );
 // ===================================================================================
-
 
 // Body parser, reading data from body into req.body
 const bodyParser = require('body-parser');
@@ -92,9 +92,12 @@ app.use(
 
 // Limit requests from same API
 const limiter = rateLimit({
-  max: 100,
+  max: 500,
   windowMs: 60 * 60 * 1000,
-  message: { mess: 'Too many requests, try again in an hour' },
+  message: {
+    message: 'Too many requests, try again in an hour',
+    status: 'warning',
+  },
 });
 app.use('/api', limiter);
 
@@ -109,7 +112,7 @@ app.use((req, res, next) => {
   // res.locals.jwt = req.cookies.jwt;
   // console.log(res.locals.jwt);
   // req.session.isAuth = true;
-  // console.log(req.session);
+  // console.log(req.cookies);
   next();
 });
 
