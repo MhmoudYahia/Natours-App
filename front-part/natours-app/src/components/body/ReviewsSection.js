@@ -84,7 +84,7 @@ export const ReviewsSection = ({ reviews }) => {
       className="reviews-section-tour"
       style={{ backgroundImage: "linear-gradient(to right, #7dd56f, #28b487)" }}
     >
-      <h2
+      {/* <h2
         style={{
           transform: "skewY(3deg)",
           textAlign: "center",
@@ -93,7 +93,7 @@ export const ReviewsSection = ({ reviews }) => {
         }}
       >
         Reviews
-      </h2>
+      </h2> */}
       <Slider {...settings}>
         {reviews &&
           reviews.map((review) => (

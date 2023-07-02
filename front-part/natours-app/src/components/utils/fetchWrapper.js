@@ -3,23 +3,24 @@ let loading;
 
 export const fetchWrapper = async (
   url,
-  body,
   method = "GET",
+  body,
   anotherOptions = {}
 ) => {
   try {
     // Set loading to true
     loading = true;
-    console.log(body, method);
+
     // Make the fetch request
     const response = await fetch(`${baseURL}${url}`, {
       method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(body),
       credentials: "include",
       withCredentials: true,
     });
-    console.log(111);
-    console.log(response);
     // Get the response data
     const { message, status, data } = await response.json();
 
@@ -31,7 +32,7 @@ export const fetchWrapper = async (
       status,
       data,
       message,
-      loading: loading,
+      loading,
     };
   } catch (error) {
     // Set loading to false

@@ -240,6 +240,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
+
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
 
@@ -253,6 +254,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 3) If so, update password
   user.password = req.body.newPassword;
   user.passwordConfirm = req.body.confirmNewPassword;
+
   // User.findByIdAndUpdate will NOT work as intended! (password validations wont work & pre save middleware )
   await user.save();
 

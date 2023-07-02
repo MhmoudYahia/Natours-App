@@ -10,12 +10,13 @@ export const UserPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [photo, setPhoto] = useState(null);
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [currPassword, setcurrPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmNewPassword, setconfirmNewPassword] = useState("");
   const [role, setRole] = useState("");
   const [alertInfo, setAlertInfo] = useState({});
   const [showAlert, setShowAlert] = useState(false);
+  const [alertTimeout,setAlertTimeout] = useState(3000);
 
   const getUserData = async () => {
     const { data, status, message } = await axiosWrapper.get("users/me");
@@ -47,22 +48,22 @@ export const UserPage = () => {
     setPhoto(file);
   };
 
-  const handleCurrentPasswordChange = (event) => {
-    setCurrentPassword(event.target.value);
+  const handlecurrPasswordChange = (event) => {
+    setcurrPassword(event.target.value);
   };
 
   const handleNewPasswordChange = (event) => {
     setNewPassword(event.target.value);
   };
 
-  const handleConfirmPasswordChange = (event) => {
-    setConfirmPassword(event.target.value);
+  const handleconfirmNewPasswordChange = (event) => {
+    setconfirmNewPassword(event.target.value);
   };
 
   if (showAlert) {
     setTimeout(() => {
       setShowAlert(false);
-    }, 3000);
+    },alertTimeout);
   }
 
   const handleSaveChanges = async () => {
@@ -79,6 +80,7 @@ export const UserPage = () => {
           title: "Message",
           message: "Your Data has been Updated successfully",
         });
+        setAlertTimeout(3000);
         setShowAlert(true);
       } else {
         setAlertInfo({
@@ -86,6 +88,7 @@ export const UserPage = () => {
           title: "try again",
           message,
         });
+        setAlertTimeout(10000);
         setShowAlert(true);
       }
       // console.log(data.updatedUser);
@@ -94,15 +97,33 @@ export const UserPage = () => {
     }
   };
 
-  const handlePasswordChange = () => {
-    const { message, data, status, loading } = fetchWrapper(
+  const handlePasswordChange = async () => {
+
+    const { message, data, status, loading } = await fetchWrapper(
       "/users/updatePassword",
       "PATCH",
-      { newPassword, currentPassword, confirmPassword }
+      { newPassword, currPassword, confirmNewPassword }
     );
-    console.log(message, data, status, loading);
-  };
-
+    if(status === "success") {
+    
+      setAlertInfo({
+        severity: "success",
+        title: "Message",
+        message: "Your Password has been Updated successfully",
+      });
+      setAlertTimeout(3000);
+      setShowAlert(true);
+    
+  }else {
+    setAlertInfo({
+      severity: "error",
+      title: "try again",
+      message,
+    });
+    setAlertTimeout(10000);
+    setShowAlert(true);
+  }
+  }
   return (
     <div className="account-settings-container">
       <SideBar role={role} />{" "}
@@ -165,8 +186,8 @@ export const UserPage = () => {
               <input
                 type="password"
                 id="current-password"
-                value={currentPassword}
-                onChange={handleCurrentPasswordChange}
+                value={currPassword}
+                onChange={handlecurrPasswordChange}
               />
             </div>
             <div>
@@ -183,8 +204,8 @@ export const UserPage = () => {
               <input
                 type="password"
                 id="confirm-password"
-                value={confirmPassword}
-                onChange={handleConfirmPasswordChange}
+                value={confirmNewPassword}
+                onChange={handleconfirmNewPasswordChange}
               />
             </div>
             <button type="button" onClick={handlePasswordChange}>

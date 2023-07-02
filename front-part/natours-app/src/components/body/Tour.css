@@ -6,6 +6,7 @@
 .tour-container {
   background-color: white;
   padding: 0 0 48px;
+  overflow: hidden;
 }
 .tour-image::after {
   content: "";
@@ -104,7 +105,10 @@
   margin-bottom: 10px;
   font-size: 16px;
 }
-
+.tour-map{
+  position: relative;
+  transform: skewY(-3deg);
+}
 .tour-facts ul {
   margin: 0;
   padding: 0;
@@ -183,7 +187,7 @@ h2.sloping-h2 {
   grid-gap: 0px;
   position: relative;
   transform: skewY(-3deg);
-  padding: 0 0 113px 0;
+  /* padding: 0 0 113px 0; */
   margin-top: 50px;
 }
 
@@ -197,9 +201,17 @@ h2.sloping-h2 {
 }
 .reviews-section-tour {
   transform: skewY(-3deg);
-  padding: 70px 0px;
+  padding: 145px 0px;
 }
 .reviews-section-tour .slick-slider{
       transform: skewY(3deg);
+}
+.tour-container .location-info{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.tour-container .mapboxgl-popup-content{
+  padding: 0 6px;
 }
 /* ///////////////////////////////////////// */
