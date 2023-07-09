@@ -18,7 +18,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Alert from '../utils/alert';
 import { fetchWrapper } from '../utils/fetchWrapper';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -42,7 +42,8 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export const SignUp = () => {
+export const ResetPassword = () => {
+  const { resetToken } = useParams();
   const [showPass1, setShowPass1] = React.useState(false);
   const [showPass2, setShowPass2] = React.useState(false);
   const [showAlert, setShowAlert] = React.useState(false);
@@ -61,19 +62,11 @@ export const SignUp = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const firstName = formData.get('firstName');
-    const lastName = formData.get('lastName');
-    const name = `${firstName} ${lastName}`;
-    formData.append('name', name);
-    formData.delete('firstName');
-    formData.delete('lastName');
     try {
       const { message, data, status, loading } = await fetchWrapper(
-        '/users/signup',
-        'POST',
+        `/users/resetPassword/${resetToken}`,
+        'PATCH',
         JSON.stringify({
-          name: formData.get('name'),
-          email: formData.get('email'),
           password: formData.get('password'),
           passwordConfirm: formData.get('passwordConfirm'),
         }),
@@ -82,8 +75,8 @@ export const SignUp = () => {
       if (status === 'success') {
         setAlertInfo({
           severity: 'success',
-          title: 'Thank You',
-          message: 'Signed Up successfully',
+          title: 'Done',
+          message: 'Your Password has Changed successfully',
         });
         setShowAlert(true);
         setAlertTimeOut(2000);
@@ -139,7 +132,7 @@ export const SignUp = () => {
             variant="h5"
             style={{ fontWeight: 600, color: '#6cdc95' }}
           >
-            Sign up
+            Reset Password
           </Typography>
           <Box
             component="form"
@@ -148,37 +141,6 @@ export const SignUp = () => {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -227,27 +189,19 @@ export const SignUp = () => {
                   autoComplete="new-password"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 ,'background-color': ' #6cdc95'}}
+              sx={{ mt: 3, mb: 2, 'background-color': ' #6cdc95' }}
             >
-              Sign Up
+              Reset Password
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="center">
               <Grid item>
                 <Link href="/signin" variant="body2">
-                  Already have an account? Sign in
+                  Return to Sign In
                 </Link>
               </Grid>
             </Grid>

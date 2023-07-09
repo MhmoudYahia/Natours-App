@@ -13,11 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '../utils/alert';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useNavigate } from 'react-router-dom';
+import { fetchWrapper } from '../utils/fetchWrapper';
 
 function Copyright(props) {
   return (
@@ -28,8 +24,8 @@ function Copyright(props) {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" href="#">
-        Natours Company
+      <Link color="inherit" href="https://mui.com/">
+        Natours{' '}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -41,58 +37,50 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export const SignIn = () => {
-  const his = useNavigate();
-  const [showAlert, setShowAlert] = React.useState(false);
+export const ForgetPassword = () => {
   const [alertInfo, setAlertInfo] = React.useState('');
-  const [showPass, setShowPass] = React.useState(false);
-  const handleToggleShowPass = () => {
-    setShowPass(!showPass);
-  };
+  const [showAlert, setShowAlert] = React.useState(false);
 
+  if (showAlert) {
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
     try {
-      const res = await fetch('http://localhost:1444/api/v1/users/login', {
-        method: 'POST',
-        headers: {
-          // Accept: "application/json",
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-        credentials: 'include',
-        body: JSON.stringify({
-          email: data.get('email'),
-          password: data.get('password'),
+      const { message, data, status, loading } = await fetchWrapper(
+        '/users/forgetPassword',
+        'POST',
+        JSON.stringify({
+          email: formData.get('email'),
         }),
-      });
-      const { status, message, token } = await res.json();
-
-      if (status !== 'success') {
+        { 'Content-Type': 'application/json' }
+      );
+      if (status === 'success') {
         setAlertInfo({
-          severity: 'error',
-          title: 'Error in Logged in ',
-          message,
+          severity: 'success',
+          title: 'Check your spam',
+          message: 'Email has been sent successfully',
         });
         setShowAlert(true);
       } else {
-        his('/');
-        window.location.reload();
         setAlertInfo({
-          severity: 'success',
-          title: 'Logged in successfully',
-          message: 'Welcome! You are now logged in',
+          severity: 'error',
+          title: 'try again',
+          message,
         });
         setShowAlert(true);
       }
-    } catch (err) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
-        <CssBaseline />
         {showAlert && (
           <Alert
             severity={alertInfo.severity}
@@ -100,6 +88,7 @@ export const SignIn = () => {
             message={alertInfo.message}
           />
         )}
+        <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
@@ -122,7 +111,11 @@ export const SignIn = () => {
             variant="h5"
             style={{ fontWeight: 600, color: '#6cdc95' }}
           >
-            Sign in
+            Forgot Password
+          </Typography>
+          <Typography style={{ padding: '16px 0px', color: '#989898' }}>
+            Lost your password? Please enter your username or email address. You
+            will receive a link to create a new password via email.
           </Typography>
           <Box
             component="form"
@@ -140,50 +133,18 @@ export const SignIn = () => {
               autoComplete="email"
               autoFocus
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type={showPass ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleToggleShowPass}
-                      edge="end"
-                      style={{ width: '50px' }}
-                    >
-                      {showPass ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2, 'background-color': ' #6cdc95' }}
             >
-              Sign In
+              send Reset Email
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/forgetpassword" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/signin" variant="body2">
+                  Remember your password?
                 </Link>
               </Grid>
             </Grid>

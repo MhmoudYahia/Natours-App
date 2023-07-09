@@ -1,15 +1,15 @@
-import React from "react";
-import "./nav.modul.css";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import LogoutIcon from "@mui/icons-material/Logout";
-import IosShareIcon from "@mui/icons-material/IosShare";
-import SailingIcon from "@mui/icons-material/Sailing";
-import axiosWrapper from "../utils/axiosWrapper";
-import Avatar from "@mui/material/Avatar";
-import Alert from "../utils/alert";
-import AlertTitle from "@mui/material/AlertTitle";
+import React from 'react';
+import './nav.modul.css';
+import { Link, useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import SailingIcon from '@mui/icons-material/Sailing';
+import axiosWrapper from '../utils/axiosWrapper';
+import Avatar from '@mui/material/Avatar';
+import Alert from '../utils/alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -19,15 +19,9 @@ export const Navbar = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axiosWrapper.get("/users/isLoggedIn");
-      if (res.status === "success") {
+      const res = await axiosWrapper.get('/users/isLoggedIn');
+      if (res.status === 'success') {
         setUser(res.user.currentUser);
-        setAlertInfo({
-          severity: "success",
-          title: "Logged in successfully",
-          message: "Welcome! You are now logged in",
-        });
-        setShowAlert(true);
       } else {
         setUser(null);
       }
@@ -48,17 +42,17 @@ export const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const { status } = await axiosWrapper.get("/users/logout");
-      if (status === "success") {
+      const { status } = await axiosWrapper.get('/users/logout');
+      if (status === 'success') {
         setUser(null);
         setAlertInfo({
-          severity: "warning",
-          title: "LOGGING OUT",
-          message: "You are about to Logged Out",
+          severity: 'warning',
+          title: 'LOGGING OUT',
+          message: 'You are about to Logged Out',
         });
         setShowAlert(true);
         setTimeout(() => {
-          navigate("/");
+          navigate('/');
           window.location.reload(true);
         }, 3000);
       }
@@ -118,11 +112,11 @@ export const Navbar = () => {
           <Link
             to="/me"
             style={{
-              display: "flex",
-              "align-items": "center",
-              gap: " 10px",
-              margin: "0 7px",
-              "text-decoration": "none",
+              display: 'flex',
+              'align-items': 'center',
+              gap: ' 10px',
+              margin: '0 7px',
+              'text-decoration': 'none',
             }}
           >
             <span id="userName">{user.name}</span>
@@ -130,7 +124,7 @@ export const Navbar = () => {
               <div className="guide-profile">
                 <img src={`/img/users/${user.photo}`} alt="" />
               </div>
-            }{" "}
+            }{' '}
           </Link>
         )}
       </div>

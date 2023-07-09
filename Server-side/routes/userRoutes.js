@@ -9,7 +9,7 @@ const {
   protect,
   strictTo,
   isLoggedIn,
-  logout
+  logout,
 } = require('../controllers/authController');
 const {
   getAllUsers,
@@ -20,7 +20,10 @@ const {
   getUser,
   getMe,
   creatUser,
+  uploadPhoto,
+  resizePhoto,
 } = require('../controllers/userController');
+
 
 router.route('/signup').post(signup);
 router.route('/login').post(login);
@@ -34,7 +37,7 @@ router.use(protect);
 
 router.route('/updatePassword').patch(updatePassword);
 router.route('/me').get(getMe, getUser);
-router.route('/updateMyData').patch(updateMyData);
+router.route('/updateMyData').patch(uploadPhoto, resizePhoto, updateMyData);
 router.route('/deleteMe').delete(deleteMe);
 
 router.use(strictTo('admin'));

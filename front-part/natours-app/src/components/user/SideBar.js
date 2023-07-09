@@ -6,9 +6,10 @@ import {
   FaUsers,
   FaBook,
   FaMapMarkerAlt,
-} from "react-icons/fa";
+} from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-const SideBar = ({ role }) => {
+const SideBar = ({ role, userId }) => {
   return (
     <section className="sidebar-user-page">
       <ul className="sidebar-nav">
@@ -19,10 +20,10 @@ const SideBar = ({ role }) => {
           </a>
         </li>
         <li>
-          <a href="#bookings">
+          <Link to="/my-bookings" state={userId}>
             <FaListAlt className="icon" />
             My Bookings
-          </a>
+          </Link>
         </li>
         <li>
           <a href="#reviews">
@@ -38,9 +39,9 @@ const SideBar = ({ role }) => {
         </li>
         <br />
         <br />
-        {role === "admin" && (
+        {role === 'admin' && (
           <>
-            <div style={{ color: "azure", marginLeft: "12px" }}>Admin</div>
+            <div style={{ color: 'azure', marginLeft: '12px' }}>Admin</div>
             <hr />
             <br />
             <li>

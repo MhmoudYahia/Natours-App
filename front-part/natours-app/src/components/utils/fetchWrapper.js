@@ -1,11 +1,11 @@
-const baseURL = "http://localhost:1444/api/v1";
+const baseURL = 'http://localhost:1444/api/v1';
 let loading;
 
 export const fetchWrapper = async (
   url,
-  method = "GET",
+  method,
   body,
-  anotherOptions = {}
+  headers
 ) => {
   try {
     // Set loading to true
@@ -13,12 +13,10 @@ export const fetchWrapper = async (
 
     // Make the fetch request
     const response = await fetch(`${baseURL}${url}`, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-      credentials: "include",
+      method,
+      headers,
+      body,
+      credentials: 'include',
       withCredentials: true,
     });
     // Get the response data
@@ -42,7 +40,7 @@ export const fetchWrapper = async (
     return {
       status: error.status || 500,
       data: null,
-      message: error.message || "Internal Server Error",
+      message: error.message || 'Internal Server Error',
       loading: loading,
     };
   }

@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useFetch } from '../utils/useFetch';
 import { PhotoGallery } from './PhotoGallary';
 import { ReviewsSection } from './ReviewsSection';
+import { Paypal } from '../utils/Paypal';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import Alert from '../utils/alert';
 
 import Map, {
   Marker,
@@ -26,14 +32,19 @@ import axiosWrapper from '../utils/axiosWrapper';
 
 export const TourDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [viewport, setViewport] = useState({
     latitude: 37.7577,
     longitude: -122.4376,
     zoom: 8,
   });
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertInfo, setAlertInfo] = useState({});
+  const [user, setUser] = useState(null);
   const [name, setName] = useState('Tour-name');
   const [rating, setRating] = useState(4.5);
+  const [price, setPrice] = useState('');
   const [difficulty, setDifficulty] = useState('medium');
   const [images, setImages] = useState([]);
   const [coverImg, setCoverImg] = useState('');
@@ -41,22 +52,27 @@ export const TourDetails = () => {
   const [duration, setDuration] = useState('duration');
   const [desc, setDesc] = useState('desc');
   const [maxGroupSize, setMaxGroupSize] = useState('maxGroupSize');
-  const [startDates, setStartDates] = useState('startDates');
+  const [startDates, setStartDates] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [guides, setGuides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const handleClosePopup = () => {
-    setSelectedLocation(null);
-  };
+  const [showPaypal, setShowPaypal] = useState(false);
+  const [summary, setSummary] = useState('summary');
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [disabledPaypal, setDisabledPaypal] = useState(true);
+
   const fetchData = async () => {
     try {
-      const { data } = await axiosWrapper.get(`/tours/${id}`);
+      const { data, user } = await axiosWrapper.get(`/tours/${id}`);
       let tour = data.doc;
+      setUser(user);
       setLoading(false);
       setName(tour.name);
+      setSummary(tour.summary);
       setLocations(tour.locations);
+      setPrice(tour.price);
       setCoverImg(tour.imageCover);
       setDuration(tour.duration);
       setDifficulty(tour.difficulty);
@@ -72,9 +88,31 @@ export const TourDetails = () => {
       console.log(error);
     }
   };
+
+  //check inly after setSelectedDate && git rid of 2 rendering
+  useEffect(() => {
+    if (selectedDate && selectedDate.soldOut === false) {
+      setDisabledPaypal(false);
+    } else if (selectedDate && selectedDate.soldOut === true) {
+      setAlertInfo({
+        severity: 'warning',
+        title: 'Sorry',
+        message: 'This Date in Fulled! Please select another one',
+      });
+      setShowAlert(true);
+    }
+  }, [selectedDate]);
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (showAlert) {
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 3000);
+  }
+
   if (loading) {
     return (
       <ReactLoading
@@ -95,6 +133,13 @@ export const TourDetails = () => {
 
   return (
     <div className="tour-container">
+      {showAlert && (
+        <Alert
+          severity={alertInfo.severity}
+          title={alertInfo.title}
+          message={alertInfo.message}
+        />
+      )}
       <section className="tour-image">
         <div className="img-layout"></div>
         <div className="image">
@@ -152,7 +197,7 @@ export const TourDetails = () => {
                 <span>{`${rating} / 5`}</span>
               </li>
               <li>
-                <FaUserFriends /> <span>Participants &nbsp; </span>{' '}
+                <FaUserFriends /> <span>Total Participants &nbsp; </span>{' '}
                 <span>{`${maxGroupSize} People`}</span>
               </li>
               <li>
@@ -202,7 +247,6 @@ export const TourDetails = () => {
                   latitude={loc.coordinates[1]}
                   // icon={<FaMapMarkerAlt />}
                   key={loc._id}
-                
                 >
                   <Popup
                     longitude={loc.coordinates[0]}
@@ -211,7 +255,7 @@ export const TourDetails = () => {
                     closeOnClick={false}
                   >
                     <div className="location-info">
-                      <p>Day {loc.day}:</p>
+                      <p style={{ flexBasis: '40px' }}>Day {loc.day}:</p>
                       <h3>{loc.description}</h3>
                     </div>
                   </Popup>
@@ -226,6 +270,106 @@ export const TourDetails = () => {
       </div>
       {/* <PhotoGallery/> */}
       <ReviewsSection reviews={reviews} />
+      <div className="book-part">
+        <div>
+          <img src={`/img/logo-green-round.png`} alt="" />
+        </div>
+        <div>
+          <h2 style={{ textTransform: 'uppercase', color: '#6cdc95' }}>
+            what are you waiting for?
+          </h2>
+          <p
+            style={{ color: '#9b9b9b' }}
+          >{`${duration} Days. 1 adventure. infinite memories. Make it yours today!`}</p>
+        </div>
+        <div>
+          <button
+            className="Button button-book"
+            onClick={() => {
+              if (user) setShowPaypal(!showPaypal);
+              else navigate('/signin');
+            }}
+          >
+            {!user
+              ? 'LOGIN AND BOOK NOW!'
+              : showPaypal
+              ? 'HIDE PAYPAL'
+              : 'BOOK TOUR NOW'}
+          </button>
+        </div>
+      </div>
+      {showPaypal && user && (
+        <div className="payment-process">
+          <h2
+            style={{
+              textAlign: 'center',
+              textTransform: 'uppercase',
+              fontTeight: 700,
+              color: 'rgb(108, 220, 149)',
+            }}
+          >
+            Payment process
+          </h2>
+          <FormControl
+            sx={{
+              minWidth: 222,
+              width: '486px',
+              margin: '30px auto 20px',
+              position: 'relative',
+              left: '50%',
+              transform: 'translateX(-50%)',
+            }}
+          >
+            <InputLabel
+              id="demo-select-small"
+              style={{ color: 'rgb(108, 220, 149)' }}
+            >
+              Select Start Date
+            </InputLabel>
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={selectedDate}
+              onChange={(e) => {
+                setSelectedDate(e.target.value);
+              }}
+              // variant="outlined"
+              fullWidth
+              label="Select Start Date"
+              defaultValue={startDates[0]}
+            >
+              <MenuItem value="" disabled>
+                Select a start date
+              </MenuItem>
+              {startDates.map((startDate) => (
+                <MenuItem key={startDate._id} value={startDate}>
+                  {new Date(startDate.date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                  })}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <hr />
+          <div
+            className="paypal"
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
+            <Paypal
+              selectedDate={selectedDate}
+              disabled={disabledPaypal}
+              amount={price}
+              name={name}
+              summary={summary}
+              tourId={id}
+              userId={user._id}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

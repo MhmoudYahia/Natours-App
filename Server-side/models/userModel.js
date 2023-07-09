@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
+    default:'default.jpg',
   },
   email: {
     type: String,

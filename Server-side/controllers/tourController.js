@@ -2,6 +2,56 @@ const Tour = require('../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 const appError = require('../utils/appError');
+const multer = require('multer');
+const sharp = require('sharp');
+
+const storage = multer.memoryStorage();
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new AppError('Not an image! Please upload an image!', 400));
+  }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
+
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+]);
+
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files) return next();
+  // 1)) ImageCover
+
+  req.body.imageCover = `tours-${req.params.id}-${Date.now()}-cover.jpeg`;
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(
+      `F:/MyRepos/Natours-App/front-part/natours-app/public/img/tours/${req.body.imageCover}`
+    );
+
+  //2)) images
+  req.body.images = [];
+  await Promise.all(
+    req.files.images.map(async (file, i) => {
+      const fileName = `tours-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+      await sharp(file.buffer)
+        .resize(2000, 1333)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(
+          `F:/MyRepos/Natours-App/front-part/natours-app/public/img/tours/${fileName}`
+        );
+      req.body.images.push(fileName);
+    })
+  );
+  next();
+});
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
@@ -109,7 +159,7 @@ exports.getDistancesFromPoint = catchAsync(async (req, res, next) => {
   const { lnglat, unit } = req.params;
   const [lng, lat] = lnglat.split(',');
 
-  const multiplier = unit === 'mi' ? 0.0006213710: 0.001;
+  const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
 
   if (!lat || !lng) {
     return next(
@@ -117,10 +167,10 @@ exports.getDistancesFromPoint = catchAsync(async (req, res, next) => {
     );
   }
 
-  const distances = await  Tour.aggregate([
+  const distances = await Tour.aggregate([
     {
       $geoNear: {
-        near: { type: 'Point', coordinates: [lng * 1 , lat * 1] },
+        near: { type: 'Point', coordinates: [lng * 1, lat * 1] },
         distanceField: 'distance',
         distanceMultiplier: multiplier,
       },

@@ -1,29 +1,32 @@
-import { useEffect, useState } from "react";
-import "./userPage.css";
-import SideBar from "./SideBar";
-import axiosWrapper from "../utils/axiosWrapper";
-import ErrorPage from "../error/ErrorPage";
-import Alert from "../utils/alert";
-import { fetchWrapper } from "../utils/fetchWrapper";
+import { useEffect, useState } from 'react';
+import './userPage.css';
+import SideBar from './SideBar';
+import axiosWrapper from '../utils/axiosWrapper';
+import ErrorPage from '../error/ErrorPage';
+import Alert from '../utils/alert';
+import { fetchWrapper } from '../utils/fetchWrapper';
 
 export const UserPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [photo, setPhoto] = useState(null);
-  const [currPassword, setcurrPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setconfirmNewPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [userId, setUserId] = useState("")
+  const [photoFile, setPhotoFile] = useState(null);
+  const [currPassword, setcurrPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setconfirmNewPassword] = useState('');
+  const [role, setRole] = useState('');
   const [alertInfo, setAlertInfo] = useState({});
   const [showAlert, setShowAlert] = useState(false);
-  const [alertTimeout,setAlertTimeout] = useState(3000);
+  const [alertTimeout, setAlertTimeout] = useState(3000);
 
   const getUserData = async () => {
-    const { data, status, message } = await axiosWrapper.get("users/me");
-    if (status === "success") {
+    const { data, status, message } = await axiosWrapper.get('users/me');
+    if (status === 'success') {
       const user = data.doc;
       setName(user.name);
       setPhoto(user.photo);
+      setUserId(user._id);
       setEmail(user.email);
       setRole(user.role);
     } else {
@@ -45,7 +48,7 @@ export const UserPage = () => {
 
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
-    setPhoto(file);
+    setPhotoFile(file);
   };
 
   const handlecurrPasswordChange = (event) => {
@@ -63,29 +66,36 @@ export const UserPage = () => {
   if (showAlert) {
     setTimeout(() => {
       setShowAlert(false);
-    },alertTimeout);
+    }, alertTimeout);
   }
 
   const handleSaveChanges = async () => {
-    try {
-      const res1 = await fetch(
-        "http://localhost:1444/api/v1/users/updateMyData",
-        { credentials: "include", withCredentials: true }
-      );
-      const { message, status, data } = await res1.json();
+    // create a FormData object to send the data as multipart/form-data
+    let formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    if (photoFile) formData.append('photo', photoFile);
+    // In JavaScript, FormData is a built-in object that provides an easy way to construct and send data in multipart/form-data format. This format is commonly used to submit forms that contain files or binary data to a server.
 
-      if (status === "success") {
+    try {
+      const { message, data, status, loading } = await fetchWrapper(
+        '/users/updateMyData',
+        'PATCH',
+        formData,
+      );
+      if (status === 'success') {
         setAlertInfo({
-          severity: "success",
-          title: "Message",
-          message: "Your Data has been Updated successfully",
+          severity: 'success',
+          title: 'Message',
+          message: 'Your Data has been Updated successfully',
         });
         setAlertTimeout(3000);
         setShowAlert(true);
+        setPhoto(data.updatedUser.photo);
       } else {
         setAlertInfo({
-          severity: "error",
-          title: "try again",
+          severity: 'error',
+          title: 'try again',
           message,
         });
         setAlertTimeout(10000);
@@ -98,35 +108,37 @@ export const UserPage = () => {
   };
 
   const handlePasswordChange = async () => {
-
     const { message, data, status, loading } = await fetchWrapper(
-      "/users/updatePassword",
-      "PATCH",
-      { newPassword, currPassword, confirmNewPassword }
+      '/users/updatePassword',
+      'PATCH',
+      JSON.stringify({ newPassword, currPassword, confirmNewPassword }),
+      { 'Content-Type': 'Application/json' }
     );
-    if(status === "success") {
-    
+
+    if (status === 'success') {
       setAlertInfo({
-        severity: "success",
-        title: "Message",
-        message: "Your Password has been Updated successfully",
+        severity: 'success',
+        title: 'Message',
+        message: 'Your Password has been Updated successfully',
       });
       setAlertTimeout(3000);
       setShowAlert(true);
-    
-  }else {
-    setAlertInfo({
-      severity: "error",
-      title: "try again",
-      message,
-    });
-    setAlertTimeout(10000);
-    setShowAlert(true);
-  }
-  }
+      setcurrPassword('');
+      setNewPassword('');
+      setconfirmNewPassword('');
+    } else {
+      setAlertInfo({
+        severity: 'error',
+        title: 'try again',
+        message,
+      });
+      setAlertTimeout(10000);
+      setShowAlert(true);
+    }
+  };
   return (
     <div className="account-settings-container">
-      <SideBar role={role} />{" "}
+      <SideBar role={role} userId={userId}/>{' '}
       {showAlert && (
         <Alert
           severity={alertInfo.severity}
@@ -157,7 +169,10 @@ export const UserPage = () => {
           </div>
           <div className="form-group">
             {photo && (
-              <div className="guide-profile">
+              <div
+                className="guide-profile"
+                style={{ width: '75px', height: '75px' }}
+              >
                 <img src={`/img/users/${photo}`} alt="" />
               </div>
             )}
@@ -168,8 +183,8 @@ export const UserPage = () => {
                 id="photo"
                 name="photo"
                 accept="image/*"
-                onchange={handlePhotoChange}
-                style={{ display: "none" }}
+                onChange={handlePhotoChange}
+                // style={{ display: 'none' }}
               />
             </label>
             <button type="button" onClick={handleSaveChanges}>

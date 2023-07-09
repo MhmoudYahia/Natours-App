@@ -10,6 +10,8 @@ const {
   getMonthlyPlan,
   getToursWithin,
   getDistancesFromPoint,
+  resizeTourImages,
+  uploadTourImages,
 } = require('../controllers/tourController');
 const authController = require('../controllers/authController');
 const reviewRouter = require('./reviewRoutes');
@@ -45,10 +47,12 @@ router
   .get(getDistancesFromPoint);
 router
   .route('/:id')
-  .get(getTour)
+  .get(authController.isLoggedInMiddleWare, getTour)
   .patch(
     authController.protect,
     authController.strictTo('admin', 'lead-guide'),
+    uploadTourImages,
+    resizeTourImages,
     updateTour
   )
   .delete(

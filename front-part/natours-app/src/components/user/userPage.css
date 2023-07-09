@@ -5,15 +5,15 @@
   top: 0;
   bottom: 0;
   left: 0;
-  width: 200px;
+  width: 310px;
   border-right: 1px solid #61ba2e;
-  width: 250px;
   background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
+  border-radius: 15px;
 }
 
 .sidebar-user-page .sidebar-nav {
   list-style: none;
-  padding: 0 12px;
+  padding: 0 29px;
   margin: 50px 0px;
   font-weight: 700;
 }
@@ -30,7 +30,7 @@
   transition: 0.3s ease;
 }
 
-.sidebar-user-page .sidebar-nav a:hover {
+.sidebar-user-page .sidebar-nav a:hover ,.sidebar-user-page li:first-child a{
   background-color: #9bd279;
   transform: translateX(7px);
   border-radius: 38px;
@@ -48,6 +48,7 @@
   flex: 1 1;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   position: relative;
+  border-radius: 15px;
 }
 
 .account-settings-user-page h2 {
@@ -144,4 +145,13 @@
   background-color: #3e8e41;
   transform: translateX(50%) translateY(-3px);
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+.my-bookings-h1{
+  background-color: aquamarine;
+  text-align: center;
+  margin: 0;
+  padding: 18px;
+  font-weight: 800;
+  color: darkblue;
 }

@@ -2,7 +2,7 @@ const catchAsync = require('../utils/catchAsync');
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const appError = require('../utils/appError');
-const sendEmail = require('../utils/email');
+const Email = require('../utils/email');
 const { promisify } = require('util');
 const crypto = require('crypto');
 const { log } = require('console');
@@ -43,6 +43,9 @@ exports.signup = catchAsync(async (req, res) => {
     passwordChangedAt: req.body.passwordChangedAt,
     role: req.body.role,
   });
+  const url = `${req.protocol}://${req.get('host')}/me`;
+
+  await new Email(newUser, url).sendWelcomeEmail();
 
   createSendToken(newUser, 201, res);
 });
@@ -116,6 +119,36 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+// Only for rendered pages, no errors!
+exports.isLoggedInMiddleWare = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      // 1) verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      // 2) Check if user still exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+
+      // 3) Check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+
+      // THERE IS A LOGGED IN USER
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
+      return next();
+    }
+  }
+  next();
+};
 
 // also if not authed
 exports.isLoggedIn = async (req, res, next) => {
@@ -183,20 +216,18 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/resetPassword/${resetToken}`;
-  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
   /*
   req.get('host') returns => localhost:1444
   */
 
   try {
-    await sendEmail({
-      email: req.body.email,
-      subject: 'Your password reset token (valid for 10 min)',
-      message,
-    });
+    //send reset email & change the port 
+    const resetURL = `${req.protocol}://${req
+      .get('host')
+      .replace(/\d+$/, 3000)}/resetpassword/${resetToken}`; 
+
+    await new Email(user, resetURL).sendResetPasswordEmail();
+
     res.status(200).json({
       status: 'success',
       message: 'Token sent to email!',
@@ -240,7 +271,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
-
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
 
