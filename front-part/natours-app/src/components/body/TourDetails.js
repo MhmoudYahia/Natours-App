@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import Alert from '../utils/alert';
-
+import { ReviewForm } from './AddReview';
 import Map, {
   Marker,
   NavigationControl,
@@ -269,7 +269,7 @@ export const TourDetails = () => {
         )}
       </div>
       {/* <PhotoGallery/> */}
-      <ReviewsSection reviews={reviews} />
+      <ReviewsSection reviews={reviews} tour={id} user={user._id} />
       <div className="book-part">
         <div>
           <img src={`/img/logo-green-round.png`} alt="" />
@@ -359,6 +359,7 @@ export const TourDetails = () => {
             style={{ display: 'flex', justifyContent: 'center' }}
           >
             <Paypal
+              key={user._id}
               selectedDate={selectedDate}
               disabled={disabledPaypal}
               amount={price}

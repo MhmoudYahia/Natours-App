@@ -201,7 +201,7 @@ h2.sloping-h2 {
 }
 .reviews-section-tour {
   transform: skewY(-3deg);
-  padding: 145px 0px;
+  padding: 131px 0px 3px;
 }
 .reviews-section-tour .slick-slider{
       transform: skewY(3deg);
@@ -246,7 +246,7 @@ h2.sloping-h2 {
   text-transform: uppercase;
   width: 170px;
 }
-.payment-process{
+.payment-process,.reviewForm{
   margin: 60px 0px;
   align-items: center;
   width: -moz-fit-content;
@@ -258,5 +258,8 @@ h2.sloping-h2 {
   padding: 25px 62px;
   border-radius: 20px;
   box-shadow: 0 0 6px 0px rgb(0,0,0,0.5);
+}
+.reviewForm{
+  transform: skewY(3deg) translateX(-50%);
 }
 /* ///////////////////////////////////////// */

@@ -43,7 +43,7 @@ export const Paypal = ({
     return actions.order
       .capture()
       .then(async function (details) {
-        const { message, data, status, loading } = await fetchWrapper(
+        let { message, data, status, loading } = await fetchWrapper(
           '/bookings/addbooking',
           'POST',
           JSON.stringify({
@@ -64,6 +64,9 @@ export const Paypal = ({
           });
           setShowAlert(true);
         } else {
+          if (message.startsWith('E11000 duplicate key')) {
+            message = 'You Allready have booked it!';
+          }
           setAlertInfo({
             severity: 'error',
             title: 'Message',
@@ -91,7 +94,7 @@ export const Paypal = ({
   return (
     <div style={{ width: '490px ' }}>
       {showAlert && (
-        <Alert
+        <Alert 
           severity={alertInfo.severity}
           title={alertInfo.title}
           message={alertInfo.message}
@@ -108,13 +111,15 @@ export const Paypal = ({
         <span style={{ fontWeight: 800, fontSize: '20px' }}>{amount}$</span>
       </h3>
       <PayPalScriptProvider
+        key={`${userId}-${tourId}`}
         options={{
           clientId:
             'AVHzWAFCcOxSsvMZOojh30s2mEx9f_5aP3pJ4RbgDiHoDSgpTJjCJmNTeT9a3_kpJaFsJZ2zA06f-OVX',
         }}
       >
         <PayPalButtons
-          key={`${userId}-${tourId}`}
+          forceReRender={[amount, selectedDate]}
+          // key={`${userId}-${tourId}`}
           disabled={disabled}
           // style={{ layout: 'vertical' }}
           createOrder={creatOrder}

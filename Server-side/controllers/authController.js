@@ -43,7 +43,7 @@ exports.signup = catchAsync(async (req, res) => {
     passwordChangedAt: req.body.passwordChangedAt,
     role: req.body.role,
   });
-  const url = `${req.protocol}://${req.get('host')}/me`;
+  const url = `${req.protocol}://${req.get('host').replace(/\d+$/, 3000)}/me`;
 
   await new Email(newUser, url).sendWelcomeEmail();
 

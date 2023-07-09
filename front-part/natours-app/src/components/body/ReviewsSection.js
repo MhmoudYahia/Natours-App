@@ -1,12 +1,13 @@
-import { useState } from "react";
-import { styled } from "@mui/material/styles";
-import { Container, Typography, Box, Rating, Grid } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
+import { useState } from 'react';
+import { styled } from '@mui/material/styles';
+import { Container, Typography, Box, Rating, Grid } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { ReviewForm } from './AddReview';
+import { Button } from '@mui/material';
 
 const ReviewCard = ({ review }) => {
   const [hover, setHover] = useState(-1);
@@ -14,24 +15,24 @@ const ReviewCard = ({ review }) => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100%",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
         maxWidth: 300,
         Height: 400,
 
         margin: 1,
         p: 4,
         borderRadius: 4,
-        bgcolor: "background.paper",
-        boxShadow: "0px 0px 5px 3px rgba(0,0,0,0.2)",
+        bgcolor: 'background.paper',
+        boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.2)',
       }}
     >
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
+          display: 'flex',
+          alignItems: 'center',
           mb: 2,
         }}
       >
@@ -39,11 +40,11 @@ const ReviewCard = ({ review }) => {
           alt={review.user.name}
           src={`/img/users/${review.user.photo}`}
         />
-        <Typography variant="h6" style={{ margin: "7px" }}>
+        <Typography variant="h6" style={{ margin: '7px' }}>
           {review.user.name}
         </Typography>
       </Box>
-      <Typography variant="body1" sx={{ mb: 2, height: 100, color: "#a1a1a1" }}>
+      <Typography variant="body1" sx={{ mb: 2, height: 100, color: '#a1a1a1' }}>
         {review.review}
       </Typography>
       <Rating
@@ -54,15 +55,15 @@ const ReviewCard = ({ review }) => {
         size="large"
         sx={{
           mb: 2,
-          "& .MuiRating-iconEmpty": {
-            color: hover !== -1 ? "#f7d2c4" : "#e8e8e8",
+          '& .MuiRating-iconEmpty': {
+            color: hover !== -1 ? '#f7d2c4' : '#e8e8e8',
           },
-          "& .MuiRating-iconFilled": {
-            color: "#7dd56f",
+          '& .MuiRating-iconFilled': {
+            color: '#7dd56f',
           },
         }}
         onMouseEnter={(e) =>
-          setHover(parseInt(e.currentTarget.getAttribute("aria-valuenow")))
+          setHover(parseInt(e.currentTarget.getAttribute('aria-valuenow')))
         }
         onMouseLeave={() => setHover(-1)}
       />
@@ -70,7 +71,7 @@ const ReviewCard = ({ review }) => {
   );
 };
 
-export const ReviewsSection = ({ reviews }) => {
+export const ReviewsSection = ({ reviews, tour, user }) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -78,11 +79,11 @@ export const ReviewsSection = ({ reviews }) => {
     slidesToShow: 4,
     slidesToScroll: 1,
   };
-
+  const [showAddReviewForm, setShowAddReviewForm] = useState(false);
   return (
     <div
       className="reviews-section-tour"
-      style={{ backgroundImage: "linear-gradient(to right, #7dd56f, #28b487)" }}
+      style={{ backgroundImage: 'linear-gradient(to right, #7dd56f, #28b487)' }}
     >
       {/* <h2
         style={{
@@ -102,6 +103,28 @@ export const ReviewsSection = ({ reviews }) => {
             </div>
           ))}
       </Slider>
+      {user && (
+        <Box
+          sx={{
+            marginTop: '1rem',
+            width: 'fit-content',
+            position: 'relative',
+            left: '50%',
+            transform: 'translateX(-50%) skewY(3deg)',
+            marginBottom: '51px',
+          }}
+        >
+          <Button
+            onClick={() => setShowAddReviewForm(!showAddReviewForm)}
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2, 'background-color': ' #6cdc95' }}
+          >
+            {showAddReviewForm ? 'Hide the form' : 'Add Review'}
+          </Button>
+        </Box>
+      )}
+      {showAddReviewForm && <ReviewForm tour={tour} user={user} />}
     </div>
   );
 };
