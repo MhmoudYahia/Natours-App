@@ -17,7 +17,6 @@ exports.addBooking = catchAsync(async (req, res, next) => {
 
     if (startDate.date.toISOString() === selectedDate.date) {
       startDate.participants++;
-      console.log(55555555555555555555555555555555555555555555555555555555555);
     }
   });
 
@@ -31,4 +30,20 @@ exports.addBooking = catchAsync(async (req, res, next) => {
     data: { doc },
   });
 });
+
+exports.isTourBookedByCurrUser = async (req, res, next) => {
+  if (!res.locals.user) {
+    return next();
+  }
+  const booking = await Booking.findOne({
+    tour: req.params.id,
+    user: res.locals.user,
+  });
+  if (booking) {
+    res.locals.booked = true;
+  } else {
+    res.locals.booked = false;
+  }
+  next();
+};
 exports.getAllBookingsToUser = factory.getAll(Booking);

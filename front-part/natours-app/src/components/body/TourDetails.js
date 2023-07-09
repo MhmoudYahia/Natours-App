@@ -62,11 +62,14 @@ export const TourDetails = () => {
   const [summary, setSummary] = useState('summary');
   const [selectedDate, setSelectedDate] = useState(null);
   const [disabledPaypal, setDisabledPaypal] = useState(true);
+  const [booked, setBooked] = useState(false);
 
   const fetchData = async () => {
     try {
-      const { data, user } = await axiosWrapper.get(`/tours/${id}`);
+      const { data, user, booked } = await axiosWrapper.get(`/tours/${id}`);
       let tour = data.doc;
+      console.log(booked);
+      setBooked(booked);
       setUser(user);
       setLoading(false);
       setName(tour.name);
@@ -269,7 +272,7 @@ export const TourDetails = () => {
         )}
       </div>
       {/* <PhotoGallery/> */}
-      <ReviewsSection reviews={reviews} tour={id} user={user._id} />
+      <ReviewsSection reviews={reviews} tourId={id} user={user} />
       <div className="book-part">
         <div>
           <img src={`/img/logo-green-round.png`} alt="" />
@@ -285,6 +288,7 @@ export const TourDetails = () => {
         <div>
           <button
             className="Button button-book"
+            disabled={booked}
             onClick={() => {
               if (user) setShowPaypal(!showPaypal);
               else navigate('/signin');
@@ -292,13 +296,15 @@ export const TourDetails = () => {
           >
             {!user
               ? 'LOGIN AND BOOK NOW!'
+              : booked
+              ? 'You Booked This Tour!'
               : showPaypal
               ? 'HIDE PAYPAL'
               : 'BOOK TOUR NOW'}
           </button>
         </div>
       </div>
-      {showPaypal && user && (
+      {showPaypal && user && !booked && (
         <div className="payment-process">
           <h2
             style={{

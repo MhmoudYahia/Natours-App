@@ -21,8 +21,7 @@ const ReviewCard = ({ review }) => {
         width: '100%',
         maxWidth: 300,
         Height: 400,
-
-        margin: 1,
+        marginBottom: 4,
         p: 4,
         borderRadius: 4,
         bgcolor: 'background.paper',
@@ -34,6 +33,7 @@ const ReviewCard = ({ review }) => {
           display: 'flex',
           alignItems: 'center',
           mb: 2,
+          marginBottom: '50px',
         }}
       >
         <Avatar
@@ -71,7 +71,7 @@ const ReviewCard = ({ review }) => {
   );
 };
 
-export const ReviewsSection = ({ reviews, tour, user }) => {
+export const ReviewsSection = ({ reviews, tourId, user }) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -120,11 +120,13 @@ export const ReviewsSection = ({ reviews, tour, user }) => {
             variant="contained"
             sx={{ mt: 3, mb: 2, 'background-color': ' #6cdc95' }}
           >
-            {showAddReviewForm ? 'Hide the form' : 'Add Review'}
+            {showAddReviewForm ? 'Hide the form' : 'Add Review on this tour'}
           </Button>
         </Box>
       )}
-      {showAddReviewForm && <ReviewForm tour={tour} user={user} />}
+      {showAddReviewForm && user && (
+        <ReviewForm tour={tourId} user={user._id} />
+      )}
     </div>
   );
 };

@@ -20,6 +20,7 @@ export const Paypal = ({
   const [orderId, setOrderId] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertInfo, setAlertInfo] = useState({});
+  const [disabledButtons, setDisableButtons] = useState(false);
 
   const creatOrder = (data, actions) => {
     return actions.order
@@ -63,6 +64,7 @@ export const Paypal = ({
               'Your Payment has been done successfully, ENJOY HAPPY TOUR!',
           });
           setShowAlert(true);
+          setDisableButtons(true);
         } else {
           if (message.startsWith('E11000 duplicate key')) {
             message = 'You Allready have booked it!';
@@ -94,7 +96,7 @@ export const Paypal = ({
   return (
     <div style={{ width: '490px ' }}>
       {showAlert && (
-        <Alert 
+        <Alert
           severity={alertInfo.severity}
           title={alertInfo.title}
           message={alertInfo.message}
@@ -119,8 +121,7 @@ export const Paypal = ({
       >
         <PayPalButtons
           forceReRender={[amount, selectedDate]}
-          // key={`${userId}-${tourId}`}
-          disabled={disabled}
+          disabled={disabled || disabledButtons}
           // style={{ layout: 'vertical' }}
           createOrder={creatOrder}
           onApprove={onApprove}

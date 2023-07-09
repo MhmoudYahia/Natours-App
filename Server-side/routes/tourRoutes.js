@@ -14,6 +14,7 @@ const {
   uploadTourImages,
 } = require('../controllers/tourController');
 const authController = require('../controllers/authController');
+const bookingController = require('../controllers/bookingsController');
 const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
@@ -47,7 +48,11 @@ router
   .get(getDistancesFromPoint);
 router
   .route('/:id')
-  .get(authController.isLoggedInMiddleWare, getTour)
+  .get(
+    authController.isLoggedInMiddleWare,
+    bookingController.isTourBookedByCurrUser,
+    getTour
+  )
   .patch(
     authController.protect,
     authController.strictTo('admin', 'lead-guide'),

@@ -201,7 +201,7 @@ h2.sloping-h2 {
 }
 .reviews-section-tour {
   transform: skewY(-3deg);
-  padding: 131px 0px 3px;
+  padding: 131px 0px 100px;
 }
 .reviews-section-tour .slick-slider{
       transform: skewY(3deg);
@@ -235,7 +235,7 @@ h2.sloping-h2 {
 .book-part .button-book{
   background-color: #4caf50;
   color: #fff;
-  padding: 9px;
+  padding: 9px 20px;
   border: none;
   font-size: 15px;
   cursor: pointer;
@@ -244,7 +244,7 @@ h2.sloping-h2 {
   margin: 17px 0px;
   transition: 0.4s;
   text-transform: uppercase;
-  width: 170px;
+  width: fit-content;
 }
 .payment-process,.reviewForm{
   margin: 60px 0px;

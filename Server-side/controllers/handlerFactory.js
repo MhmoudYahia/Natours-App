@@ -59,6 +59,7 @@ exports.getOne = (Model, popOptions) =>
       status: 'success',
       data: { doc },
       user: res.locals.user,
+      booked: res.locals.booked,
     });
   });
 
@@ -67,7 +68,7 @@ exports.getAll = (Model) =>
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourId };
     if (req.params.userId) filter = { user: req.params.userId };
-   
+
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
