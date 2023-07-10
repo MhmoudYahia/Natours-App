@@ -272,7 +272,12 @@ export const TourDetails = () => {
         )}
       </div>
       {/* <PhotoGallery/> */}
-      <ReviewsSection reviews={reviews} tourId={id} user={user} />
+      <ReviewsSection
+        reviews={reviews}
+        tourId={id}
+        user={user}
+        booked={booked}
+      />
       <div className="book-part">
         <div>
           <img src={`/img/logo-green-round.png`} alt="" />

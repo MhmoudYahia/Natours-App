@@ -26,10 +26,10 @@ const SideBar = ({ role, userId }) => {
           </Link>
         </li>
         <li>
-          <a href="#reviews">
+          <Link to="/my-reviews" state={userId}>
             <FaStar className="icon" />
             My Reviews
-          </a>
+          </Link>
         </li>
         <li>
           <a href="#billing">

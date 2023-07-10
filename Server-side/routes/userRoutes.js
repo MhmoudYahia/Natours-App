@@ -24,6 +24,9 @@ const {
   resizePhoto,
 } = require('../controllers/userController');
 
+//make review router on user (CRUD on its reviews)
+const reviewRouter = require('./reviewRoutes');
+router.use('/:userId/reviews', reviewRouter);
 
 router.route('/signup').post(signup);
 router.route('/login').post(login);

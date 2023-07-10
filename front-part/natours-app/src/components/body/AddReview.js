@@ -68,13 +68,6 @@ export const ReviewForm = ({ tour, user }) => {
   };
   return (
     <>
-      {showAlert && (
-        <Alert
-          severity={alertInfo.severity}
-          title={alertInfo.title}
-          message={alertInfo.message}
-        />
-      )}
       <div className="reviewForm">
         {showAlert && (
           <Alert

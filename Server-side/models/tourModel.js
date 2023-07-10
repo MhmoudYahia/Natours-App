@@ -129,6 +129,7 @@ const tourSchema = new mongoose.Schema(
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
     // strictQuery: true,
+    virtuals: true
   }
 );
 // tourSchema.pre('save', function(next) {
@@ -167,7 +168,7 @@ tourSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'guides',
     select: '-__v -role',
-  });
+  })
   next();
 });
 

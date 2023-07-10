@@ -5,12 +5,13 @@ import { useFetch } from '../utils/useFetch';
 import ErrorPage from '../error/ErrorPage';
 import ReactLoading from 'react-loading';
 
+import { Typography } from '@mui/material';
+
 export const MyBookings = () => {
   const { state: userId } = useLocation();
   const { status, data, message, loading } = useFetch(
     `http://localhost:1444/api/v1/bookings/${userId}`
   );
-  console.log(data);
   if (loading) {
     return (
       <ReactLoading
@@ -35,7 +36,9 @@ export const MyBookings = () => {
 
   return (
     <>
-    <h1 className='my-bookings-h1'>My Bookings</h1>
+          <Typography variant="h4" component="h1" className='my-bookings-h1' gutterBottom>
+        My Reviews
+      </Typography>
       <div className="Body-cards">
         
         {data && data.docs.map((booking) => <TourCard tour={booking.tour} />)}

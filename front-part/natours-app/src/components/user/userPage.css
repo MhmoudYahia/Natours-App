@@ -147,11 +147,23 @@
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
 }
 
+th{
+  font-weight: 600 !important;
+  font-size: 19px !important;
+  background-image: linear-gradient(to right bottom, #7dd56f, #28b487) !important;
+  text-align: center !important;
+  color: white !important;
+}
+
+td{
+  font-size: 16px !important;
+  text-align: center !important;
+}
 .my-bookings-h1{
-  background-color: aquamarine;
+  background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
   text-align: center;
-  margin: 0;
+  margin: 0 !important;
   padding: 18px;
-  font-weight: 800;
+  font-weight: 600 !important;
   color: darkblue;
 }

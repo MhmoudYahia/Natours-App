@@ -17,7 +17,7 @@ import { Page404 } from './components/error/Page404';
 import { MyBookings } from './components/user/MyBookings';
 import { ForgetPassword } from './components/signup-in/ForgetPassword';
 import { ResetPassword } from './components/signup-in/ResetPassword';
-
+import { MyReviewsPage } from './components/user/MyReviews';
 
 function App() {
   return (
@@ -40,6 +40,7 @@ function App() {
             <Route path="/my-bookings" element={<MyBookings />}></Route>
             <Route path="/forgetpassword" element={<ForgetPassword />}></Route>
             <Route path="/resetpassword/:resetToken" element={<ResetPassword />}></Route>
+            <Route path="/my-reviews" element={<MyReviewsPage />}></Route>
           </Route>
 
           <Route path="/404" element={<Page404 />}></Route>

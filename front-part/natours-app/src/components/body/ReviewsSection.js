@@ -71,7 +71,7 @@ const ReviewCard = ({ review }) => {
   );
 };
 
-export const ReviewsSection = ({ reviews, tourId, user }) => {
+export const ReviewsSection = ({ reviews, tourId, user,booked }) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -103,7 +103,7 @@ export const ReviewsSection = ({ reviews, tourId, user }) => {
             </div>
           ))}
       </Slider>
-      {user && (
+      {user && booked && (
         <Box
           sx={{
             marginTop: '1rem',

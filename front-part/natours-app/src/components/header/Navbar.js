@@ -22,6 +22,12 @@ export const Navbar = () => {
       const res = await axiosWrapper.get('/users/isLoggedIn');
       if (res.status === 'success') {
         setUser(res.user.currentUser);
+        setAlertInfo({
+          severity: 'success',
+          title: 'Logged in successfully',
+          message: 'Welcome! You are now logged in',
+        });
+        setShowAlert(true);
       } else {
         setUser(null);
       }

@@ -79,12 +79,6 @@ export const SignIn = () => {
       } else {
         his('/');
         window.location.reload();
-        setAlertInfo({
-          severity: 'success',
-          title: 'Logged in successfully',
-          message: 'Welcome! You are now logged in',
-        });
-        setShowAlert(true);
       }
     } catch (err) {}
   };
