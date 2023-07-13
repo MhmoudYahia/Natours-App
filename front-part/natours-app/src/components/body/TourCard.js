@@ -41,7 +41,7 @@ export const TourCard = ({ tour }) => {
           <div>
             <WorkIcon style={{ color: "rgba(40, 180, 135, 0.85)" }} />
             <span>
-              {new Date(tour.startDates[0]).toLocaleString("en-us", {
+              {new Date(tour.startDates[0].date).toLocaleString("en-us", {
                 month: "long",
                 year: "numeric",
               })

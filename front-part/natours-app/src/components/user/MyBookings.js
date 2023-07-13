@@ -34,13 +34,18 @@ export const MyBookings = () => {
     return <ErrorPage errorMessage={message} />;
   }
 
+
   return (
     <>
-          <Typography variant="h4" component="h1" className='my-bookings-h1' gutterBottom>
-        My Reviews
+      <Typography
+        variant="h4"
+        component="h1"
+        className="my-bookings-h1"
+        gutterBottom
+      >
+        My Bookings
       </Typography>
       <div className="Body-cards">
-        
         {data && data.docs.map((booking) => <TourCard tour={booking.tour} />)}
       </div>
     </>

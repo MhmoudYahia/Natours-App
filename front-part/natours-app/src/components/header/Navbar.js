@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './nav.modul.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -10,6 +10,7 @@ import axiosWrapper from '../utils/axiosWrapper';
 import Avatar from '@mui/material/Avatar';
 import Alert from '../utils/alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import { useFetch } from '../utils/useFetch';
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -17,28 +18,22 @@ export const Navbar = () => {
   const [showAlert, setShowAlert] = React.useState(false);
   const [alertInfo, setAlertInfo] = React.useState({});
 
-  const fetchData = async () => {
-    try {
-      const res = await axiosWrapper.get('/users/isLoggedIn');
-      if (res.status === 'success') {
-        setUser(res.user.currentUser);
-        setAlertInfo({
-          severity: 'success',
-          title: 'Logged in successfully',
-          message: 'Welcome! You are now logged in',
-        });
-        setShowAlert(true);
-      } else {
-        setUser(null);
-      }
-    } catch (error) {
-      console.log(error);
+  const { loading, status, data, message } = useFetch(
+    'http://localhost:1444/api/v1/users/isLoggedIn'
+  );
+  useEffect(() => {
+    if (status === 'success') {
+      setUser(data.currentUser);
+      setAlertInfo({
+        severity: 'success',
+        title: 'Logged in successfully',
+        message: 'Welcome! You are now logged in',
+      });
+      setShowAlert(true);
+    } else {
+      setUser(null);
     }
-  };
-
-  React.useEffect(() => {
-    fetchData();
-  }, []);
+  }, [status]);
 
   if (showAlert) {
     setTimeout(() => {

@@ -32,7 +32,7 @@ const tourSchema = new mongoose.Schema(
     },
     ratingsAverage: {
       type: Number,
-      default: 4.5,
+      default: 2.5,
       min: [1, 'Rating must be above 1.0'],
       max: [5, 'Rating musty be below 5.0'],
       set: (val) => Math.round(val * 10) / 10,
@@ -129,7 +129,7 @@ const tourSchema = new mongoose.Schema(
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
     // strictQuery: true,
-    virtuals: true
+    virtuals: true,
   }
 );
 // tourSchema.pre('save', function(next) {
@@ -168,7 +168,7 @@ tourSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'guides',
     select: '-__v -role',
-  })
+  });
   next();
 });
 

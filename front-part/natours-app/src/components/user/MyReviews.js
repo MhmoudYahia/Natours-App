@@ -183,131 +183,147 @@ export const MyReviewsPage = () => {
   function handleCollapseReview() {
     setExpandedReviewId(null);
   }
-
   return (
-    <Container
-      maxWidth="lg"
-      style={{ padding: 0, minHeight: '78vh', marginTop: '40px' }}
-    >
-      {/* <Typography variant="h4" component="h1" className='my-bookings-h1' gutterBottom>
+    <>
+      <Typography
+        variant="h4"
+        component="h1"
+        className="my-bookings-h1"
+        gutterBottom
+      >
         My Reviews
-      </Typography> */}
-      {showAlert && (
-        <Alert
-          severity={alertInfo.severity}
-          title={alertInfo.title}
-          message={alertInfo.message}
-        />
-      )}
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Tour Name</TableCell>
-            <TableCell>Rating</TableCell>
-            <TableCell>Review</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {reviews &&
-            reviews.map((review) => (
-              <TableRow key={review._id}>
-                <TableCell>{review.tour.name}</TableCell>
-                <TableCell>
-                  <Rating
-                    name="read-only"
-                    value={review.rating}
-                    precision={0.5}
-                    readOnly
-                  />
-                </TableCell>
-                <TableCell>
-                  {expandedReviewId === review._id ? (
-                    <div>
-                      {review.review}
-                      <Box mt={2} display="inline-block">
-                        <Button variant="text" onClick={handleCollapseReview}>
-                          Show less
-                        </Button>
-                      </Box>
-                    </div>
-                  ) : (
-                    <div>
-                      {truncate(review.review, 50)}
-                      {review.review.length > 50 && (
-                        <Box mt={2} display="inline-block" j>
-                          <Button
-                            variant="text"
-                            onClick={() => handleExpandReview(review._id)}
-                          >
-                            Read more
+      </Typography>
+      <div
+        // maxWidth="lg"
+        style={{
+          padding: 0,
+          minHeight: '78vh',
+          marginTop: '100px',
+          marginLeft: 20,
+          marginRight: 20,
+        }}
+      >
+        {showAlert && (
+          <Alert
+            severity={alertInfo.severity}
+            title={alertInfo.title}
+            message={alertInfo.message}
+          />
+        )}
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Tour Name</TableCell>
+              <TableCell>Rating</TableCell>
+              <TableCell>Review</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {reviews &&
+              reviews.map((review) => (
+                <TableRow key={review._id}>
+                  <TableCell width="250px">{review.tour.name}</TableCell>
+                  <TableCell width="180px">
+                    <Rating
+                      name="read-only"
+                      value={review.rating}
+                      precision={0.5}
+                      readOnly
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {expandedReviewId === review._id ? (
+                      <div>
+                        {review.review}
+                        <Box mt={2} display="inline-block">
+                          <Button variant="text" onClick={handleCollapseReview}>
+                            Show less
                           </Button>
                         </Box>
-                      )}
-                    </div>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <Button
-                    color="primary"
-                    onClick={() => setEditing(review._id)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    color="error"
-                    onClick={() => handleDelete(review._id)}
-                  >
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-      <Dialog open={editing !== null} onClose={handleEditCancel}>
-        <DialogTitle>Edit Review</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Please edit your review below.</DialogContentText>
-          <Box mb={2}>
-            <Rating
-              name="edit-rating"
-              value={editRating}
-              precision={0.5}
-              onChange={(event, value) => setEditRating(value)}
+                      </div>
+                    ) : (
+                      <div>
+                        {truncate(review.review, 50)}
+                        {review.review.length > 50 && (
+                          <Box mt={2} display="inline-block" j>
+                            <Button
+                              variant="text"
+                              onClick={() => handleExpandReview(review._id)}
+                            >
+                              Read more
+                            </Button>
+                          </Box>
+                        )}
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell width="180px">
+                    <Button
+                      color="primary"
+                      variant='contained'
+                      onClick={() => setEditing(review._id)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      color="error"
+                      variant='contained'
+                      onClick={() => handleDelete(review._id)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+        <Dialog open={editing !== null} onClose={handleEditCancel}>
+          <DialogTitle>Edit Review</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please edit your review below.
+            </DialogContentText>
+            <Box mb={2}>
+              <Rating
+                name="edit-rating"
+                value={editRating}
+                precision={0.5}
+                onChange={(event, value) => setEditRating(value)}
+              />
+            </Box>
+            <TextField
+              fullWidth
+              multiline
+              rows={4}
+              variant="outlined"
+              label="Review"
+              value={editText}
+              onChange={(event) => setEditText(event.target.value)}
             />
-          </Box>
-          <TextField
-            fullWidth
-            multiline
-            rows={4}
-            variant="outlined"
-            label="Review"
-            value={editText}
-            onChange={(event) => setEditText(event.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleEditCancel}>Cancel</Button>
-          <Button color="primary" onClick={handleEditSubmit}>
-            Save Changes
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
-        <DialogTitle>Delete Review</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this review?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteCancel}>Cancel</Button>
-          <Button color="error" onClick={handleDeleteConfirm}>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Container>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleEditCancel}>Cancel</Button>
+            <Button color="primary" onClick={handleEditSubmit}>
+              Save Changes
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
+          <DialogTitle>Delete Review</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete this review?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDeleteCancel}>Cancel</Button>
+            <Button color="error" onClick={handleDeleteConfirm}>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    </>
   );
 };

@@ -180,7 +180,7 @@ exports.isLoggedIn = async (req, res, next) => {
       // THERE IS A LOGGED IN USER
       res.status(200).json({
         status: 'success',
-        user: { currentUser },
+        data: { currentUser },
       });
     } catch (err) {
       console.log(err);
@@ -221,10 +221,10 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   */
 
   try {
-    //send reset email & change the port 
+    //send reset email & change the port
     const resetURL = `${req.protocol}://${req
       .get('host')
-      .replace(/\d+$/, 3000)}/resetpassword/${resetToken}`; 
+      .replace(/\d+$/, 3000)}/resetpassword/${resetToken}`;
 
     await new Email(user, resetURL).sendResetPasswordEmail();
 

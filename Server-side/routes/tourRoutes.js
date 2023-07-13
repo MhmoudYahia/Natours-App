@@ -24,20 +24,23 @@ router.route('/tour-stats').get(getTourStats);
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 
 router
+  .route('/monthly-plan/:year')
+  .get(
+    authController.protect,
+    authController.strictTo('admin', 'guide', 'lead-guide'),
+    getMonthlyPlan
+  );
+
+router
   .route('/')
   .get(getAllTours)
   .post(
     authController.protect,
     authController.strictTo('admin', 'lead-guide'),
+    uploadTourImages,
+    resizeTourImages,
     createTour
   );
-router
-  .route(
-    authController.protect,
-    authController.strictTo('admin', 'guide', 'lead-guide'),
-    '/monthly-plan/:year'
-  )
-  .get(getMonthlyPlan);
 
 router
   .route('/tours-Within/:distance/center/:lnglat/unit/:unit')

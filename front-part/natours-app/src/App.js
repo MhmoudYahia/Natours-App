@@ -18,6 +18,8 @@ import { MyBookings } from './components/user/MyBookings';
 import { ForgetPassword } from './components/signup-in/ForgetPassword';
 import { ResetPassword } from './components/signup-in/ResetPassword';
 import { MyReviewsPage } from './components/user/MyReviews';
+import { ManageTourPanel } from './components/manager/manageTours/ManageToursPanel';
+import { ManageUsersPanel } from './components/manager/manageUsers/ManageUsersPanel';
 
 function App() {
   return (
@@ -39,11 +41,22 @@ function App() {
             <Route path="/me" element={<UserPage />}></Route>
             <Route path="/my-bookings" element={<MyBookings />}></Route>
             <Route path="/forgetpassword" element={<ForgetPassword />}></Route>
-            <Route path="/resetpassword/:resetToken" element={<ResetPassword />}></Route>
+            <Route
+              path="/resetpassword/:resetToken"
+              element={<ResetPassword />}
+            ></Route>
             <Route path="/my-reviews" element={<MyReviewsPage />}></Route>
+            <Route
+              path="/manage-tours-panel"
+              element={<ManageTourPanel />}
+            ></Route>
+            <Route
+              path="/manage-users-panel"
+              element={<ManageUsersPanel />}
+            ></Route>
           </Route>
 
-          <Route path="/404" element={<Page404 />}></Route>
+          <Route path="*" element={<Page404 />}></Route>
         </Routes>
       </Router>
       <Footer />

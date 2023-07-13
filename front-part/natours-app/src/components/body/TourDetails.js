@@ -210,7 +210,7 @@ export const TourDetails = () => {
               <li>
                 <FaCalendarAlt /> <span>Next Date &nbsp;</span>{' '}
                 <span>
-                  {new Date(startDates[0]).toLocaleString('en-us', {
+                  {new Date(startDates[0].date).toLocaleString('en-us', {
                     month: 'long',
                     year: 'numeric',
                   })}

@@ -39,24 +39,32 @@ const SideBar = ({ role, userId }) => {
         </li>
         <br />
         <br />
-        {role === 'admin' && (
+        {(role === 'admin' || role === 'guide' || role === 'lead-guide') && (
           <>
-            <div style={{ color: 'azure', marginLeft: '12px' }}>Admin</div>
+            <div
+              style={{
+                color: 'azure',
+                marginLeft: '12px',
+                textTransform: 'capitalize',
+              }}
+            >
+              {role}
+            </div>
             <hr />
             <br />
             <li>
-              <a href="#billing">
+              <Link to="/manage-tours-panel" state={{ role, userId }}>
                 <FaMapMarkerAlt className="icon" />
                 Manage Tours
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#billing">
+              <Link to="/manage-users-panel" state={{ role, userId }}>
                 <FaUsers className="icon" />
                 Manage Users
-              </a>
+              </Link>
             </li>
-            <li>
+            {/* <li>
               <a href="#billing">
                 <FaStar className="icon" />
                 Manage Reviews
@@ -67,7 +75,7 @@ const SideBar = ({ role, userId }) => {
                 <FaBook className="icon" />
                 Manage Bookings
               </a>
-            </li>
+            </li> */}
           </>
         )}
       </ul>

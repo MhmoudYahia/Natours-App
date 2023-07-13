@@ -4,7 +4,6 @@ const factory = require('./handlerFactory');
 const appError = require('../utils/appError');
 const multer = require('multer');
 const sharp = require('sharp');
-
 const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
@@ -26,30 +25,47 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
   if (!req.files) return next();
   // 1)) ImageCover
 
-  req.body.imageCover = `tours-${req.params.id}-${Date.now()}-cover.jpeg`;
-  await sharp(req.files.imageCover[0].buffer)
-    .resize(2000, 1333)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(
-      `F:/MyRepos/Natours-App/front-part/natours-app/public/img/tours/${req.body.imageCover}`
-    );
+  //parse form data
+  for (const key in req.body) {
+    if (typeof req.body[key] === 'string') {
+      try {
+        req.body[key] = JSON.parse(req.body[key]);
+      } catch (error) {
+        // if the value is not a valid JSON string, do nothing
+      }
+    }
+  }
+  req.body = JSON.parse(JSON.stringify(req.body));
+
+  if (req.files.imageCover) {
+    req.body.imageCover = `tours-${req.body.price}-${Date.now()}-cover.jpeg`;
+    await sharp(req.files.imageCover[0].buffer)
+      .resize(2000, 1333)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(
+        `F:/MyRepos/Natours-App/front-part/natours-app/public/img/tours/${req.body.imageCover}`
+      );
+  }
 
   //2)) images
-  req.body.images = [];
-  await Promise.all(
-    req.files.images.map(async (file, i) => {
-      const fileName = `tours-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
-      await sharp(file.buffer)
-        .resize(2000, 1333)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(
-          `F:/MyRepos/Natours-App/front-part/natours-app/public/img/tours/${fileName}`
-        );
-      req.body.images.push(fileName);
-    })
-  );
+
+  if (req.files.images) {
+    req.body.images = [];
+    await Promise.all(
+      req.files.images.map(async (file, i) => {
+        const fileName = `tours-${req.body.price}-${Date.now()}-${i + 1}.jpeg`;
+        await sharp(file.buffer)
+          .resize(2000, 1333)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(
+            `F:/MyRepos/Natours-App/front-part/natours-app/public/img/tours/${fileName}`
+          );
+        req.body.images.push(fileName);
+      })
+    );
+  }
   next();
 });
 
@@ -97,7 +113,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     { $unwind: '$startDates' },
     {
       $match: {
-        startDates: {
+        'startDates.date': {
           $gte: new Date(`${year}-01-01`),
           $lte: new Date(`${year}-12-31`),
         },
@@ -105,7 +121,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     },
     {
       $group: {
-        _id: { $month: '$startDates' },
+        _id: { $month: '$startDates.date' },
         numTourStarts: { $sum: 1 },
         tours: { $push: '$name' },
       },

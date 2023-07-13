@@ -7,6 +7,7 @@ const router = express.Router({ mergeParams: true }); //When mergeParams is set 
 router.use(authController.protect);
 
 router.get('/', revController.getAllReviews);
+
 router.post(
   '/addreview',
   authController.protect,
@@ -14,9 +15,12 @@ router.post(
   revController.setUserTourIds,
   revController.addNewReview
 );
+
 router
   .route('/:id')
   .get(revController.getReview)
   .delete(authController.strictTo('user', 'admin'), revController.deleteReview)
   .patch(authController.strictTo('user', 'admin'), revController.updateReview);
+
+  
 module.exports = router;

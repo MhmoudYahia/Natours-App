@@ -67,7 +67,7 @@ app.use(
 
 // Body parser, reading data from body into req.body
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 

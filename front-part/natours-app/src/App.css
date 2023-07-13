@@ -1,7 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800&display=swap");
-.App {
-  margin: 20px;
-}
 body {
   background-color: #29b9ab;
 }
@@ -57,7 +54,9 @@ body {
     top: 64px;
   }
 }
-
+.css-heg063-MuiTabs-flexContainer{
+  justify-content: center;
+}
 /*======================
     404 page
 =======================*/
@@ -86,7 +85,9 @@ body {
 .four_zero_four_bg h3 {
   font-size: 80px;
 }
-
+td{
+  color: #424242 !important;
+}
 .link_404 {
   color: #fff !important;
   padding: 10px 20px;
