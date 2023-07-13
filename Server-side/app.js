@@ -8,7 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-
+const compression = require('compression')
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
@@ -91,7 +91,9 @@ app.use(
   })
 );
 
-// Limit requests from same API
+// compress the responses
+app.use(compression())
+
 const limiter = rateLimit({
   max: 500,
   windowMs: 60 * 60 * 1000,
