@@ -35,7 +35,7 @@ export const DeleteTourForm = () => {
   }
 
   const { data: mytours, status: st3 } = useFetch(
-    'http://localhost:1444/api/v1/tours'
+    '/api/v1/tours'
   );
 
   if (st3 === 'success' && mytours) {

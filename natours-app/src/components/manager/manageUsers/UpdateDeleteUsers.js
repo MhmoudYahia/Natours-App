@@ -38,7 +38,7 @@ export const ManageALlUsers = () => {
   const [showAlert, setShowAlert] = useState(false);
 
   const { data, status, loading, message } = useFetch(
-    `http://localhost:1444/api/v1/users`
+    `/api/v1/users`
   );
 
   useEffect(() => {

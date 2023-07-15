@@ -54,7 +54,7 @@ export const ManageTourPanel = (props) => {
   const [value, setValue] = React.useState(0);
 
   const { loading, status, data, message } = useFetch(
-    'http://localhost:1444/api/v1/users/isLoggedIn'
+    '/api/v1/users/isLoggedIn'
   );
 
   if (loading) {

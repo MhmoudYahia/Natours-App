@@ -109,13 +109,13 @@ export const AddTourForm = () => {
 
   let guides = [];
   let { status: st1, data: guidesData } = useFetch(
-    'http://localhost:1444/api/v1/users?role=guide'
+    '/api/v1/users?role=guide'
   );
 
   if (st1 === 'success') guidesData = guidesData.docs;
 
   const { status: st2, data: guidesData2 } = useFetch(
-    'http://localhost:1444/api/v1/users?role=lead-guide'
+    '/api/v1/users?role=lead-guide'
   );
 
   if (st1 === 'success') guidesData = guidesData.concat(guidesData2.docs);

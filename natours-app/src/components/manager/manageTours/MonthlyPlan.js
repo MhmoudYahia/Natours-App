@@ -45,7 +45,7 @@ export const MonthlyPlanTable = () => {
     loading,
     message,
   } = useFetch(
-    `http://localhost:1444/api/v1/tours/monthly-plan/${yearSlected}`
+    `/api/v1/tours/monthly-plan/${yearSlected}`
   );
 
   return (

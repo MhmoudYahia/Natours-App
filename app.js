@@ -15,6 +15,7 @@ const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 const appError = require('./utils/appError');
+const path = require('path');
 
 const app = express();
 
@@ -108,7 +109,11 @@ const cors = require('cors');
 app.use(cors({ origin: true, credentials: true }));
 
 // Serving static files
-app.use(express.static('./natours-app/build'));
+app.use(express.static(path.join(__dirname, './natours-app/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './natours-app/build/index.html'));
+});
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
