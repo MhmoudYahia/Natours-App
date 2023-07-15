@@ -17,12 +17,12 @@ const DBString = process.env.DATABASE.replace(
   process.env.PASSWORD
 );
 
+let server;
 mongoose.connect(DBString).then(() => {
   console.log('DB connection established');
-});
-
-const server = app.listen(PORT, () => {
-  console.log(`server listening on port ${PORT}`);
+  server = app.listen(PORT, () => {
+    console.log(`server listening on port ${PORT}`);
+  });
 });
 
 process.on('unhandledRejection', (err) => {

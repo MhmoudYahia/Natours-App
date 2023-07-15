@@ -116,14 +116,16 @@ app.use((req, res, next) => {
   // console.log(req.cookies);
   next();
 });
-
 // Serving static files
-app.use(express.static('F:/MyRepos/Natours-App/natours-app/build'));
+app.use(express.static(path.join(__dirname, './natours-app')));
+
 
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
+
+
 
 // if the above route doesn't fit, this will work
 app.all('*', (req, res, next) => {
