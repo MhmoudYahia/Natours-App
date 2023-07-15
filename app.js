@@ -116,21 +116,17 @@ app.use((req, res, next) => {
   // console.log(req.cookies);
   next();
 });
-app.get('/*', (req, res, next) => {
-  res.setHeader('Last-Modified', new Date().toUTCString());
-  next();
-});
+
+// Serving static files
+app.use(express.static(path.join(__dirname, './natours-app/build')));
+
+
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
 
-// Serving static files
-app.use(express.static(path.join(__dirname, './natours-app/build')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './natours-app/build/index.html'));
-});
 
 // if the above route doesn't fit, this will work
 app.all('*', (req, res, next) => {
