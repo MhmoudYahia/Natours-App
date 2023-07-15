@@ -108,12 +108,6 @@ app.use('/api', limiter);
 const cors = require('cors');
 app.use(cors({ origin: true, credentials: true }));
 
-// Serving static files
-app.use(express.static(path.join(__dirname, './natours-app/build')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './natours-app/build/index.html'));
-});
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -128,6 +122,14 @@ app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/bookings', bookingRouter);
+
+// Serving static files
+app.use(express.static(path.join(__dirname, './natours-app/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './natours-app/build/index.html'));
+});
+
 
 // if the above route doesn't fit, this will work
 app.all('*', (req, res, next) => {
