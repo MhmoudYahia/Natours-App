@@ -108,7 +108,7 @@ const cors = require('cors');
 app.use(cors({ origin: true, credentials: true }));
 
 // Serving static files
-app.use(express.static('./natours-app'));
+app.use(express.static('./natours-app/build'));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
