@@ -8,7 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-const compression = require('compression')
+const compression = require('compression');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
@@ -92,7 +92,7 @@ app.use(
 );
 
 // compress the responses
-app.use(compression())
+app.use(compression());
 
 const limiter = rateLimit({
   max: 500,
@@ -108,7 +108,7 @@ const cors = require('cors');
 app.use(cors({ origin: true, credentials: true }));
 
 // Serving static files
-app.use(express.static('../front-part'));
+app.use(express.static('./natours-app'));
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();

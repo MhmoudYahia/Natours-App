@@ -44,7 +44,7 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
       .toFormat('jpeg')
       .jpeg({ quality: 90 })
       .toFile(
-        `F:/MyRepos/Natours-App/front-part/natours-app/public/img/tours/${req.body.imageCover}`
+        `F:/MyRepos/Natours-App/Server-side/natours-app/public/img/tours/${req.body.imageCover}`
       );
   }
 
