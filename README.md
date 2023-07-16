@@ -6,12 +6,13 @@
 Exciting tours for adventurous people. Natours is an application for users to book tours.
 
 
+## Demo
+A quick tour in the app [here](https://drive.google.com/file/d/1CSIBTy8cjZFAuN0_AUN70e68c8HC6JZ3/view?usp=drive_link)
 
-
-### 🧑🏼‍💻 Client  Tech Stack
+## 🧑🏼‍💻 Client  Tech Stack
 - ReactJS
 
-### 🧑🏼‍💻 Server  Tech Stack 
+## 🧑🏼‍💻 Server  Tech Stack 
 - NodeJS
 - ExpressJs
 - MongoDB 
