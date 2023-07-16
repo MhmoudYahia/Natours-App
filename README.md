@@ -1,5 +1,4 @@
-
-![Logo](data:image/jpeg;base64,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)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/97c2959e-dc7e-4349-83ef-77d9e8c90b0e)
 
 
 # Natours
@@ -17,18 +16,61 @@ Exciting tours for adventurous people. Natours is an application for users to bo
 - ExpressJs
 - MongoDB 
 
+## Features
 
-## 📱 Screenshots
+- Good authentication using JWT and cookies
+- Forget Password Form
+- Verification password using email
+- payment integration using Paypal 
+- Admin panel to  manage tours and users
+- User can change his password using email verification
+- Rating is calculated automatically when a user adds a review
+- User can upload and change  his photo
+- Live previews
+- Fullscreen mode
+- Cross platform
+- More
+  
+## API Reference
 
-![App Screenshot](
-  ![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/d02022b2-25ab-46a9-94bc-c9d28f488f27)
-)
+#### Get all items
+
+```http
+  GET /api/v1/tours
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `api_key` | `string` |You can get all tours, create new ones, and edit and delete tours. There are also special endpoints for some special requirements.|
 
 
-## Demo
 
-Insert gif or link to demo
+#### See Full API Documentation on Postman [here](https://documenter.getpostman.com/view/23936176/2s946fdsZJ)
 
+## 📱 Screenshots (More Details are in Live Demo)
+
+### Home Page
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/362ad769-d958-4b04-ab64-60d1b09a94f6)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/e708975c-2fcf-44a5-9ff3-858d367a4773)
+
+### Tour Details
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/41e806d4-0815-4e36-b865-af63297c8fac)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/710d2ad2-9a0d-4c26-ab56-00c9338e7409)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/6850626e-5adf-4282-997d-43ef3f8cfa30)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/3ddef304-1b4a-445b-b194-c2a45cc7a095)
+### User Page
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/3d914c05-f40d-4457-b784-92fd81938653)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/cf382eeb-115e-48fe-b844-7bea5ae20ef2)
+
+### Admin Panel
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/bf722d85-4906-4741-9f3b-f0782510d6fa)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/aff07428-bf97-486e-9344-303ff40b6da1)
+
+### LogIn - SignUp - Forget Password - Reset Password
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/f247c463-944e-4bf7-9966-aa857233f2c4)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/ef154815-945f-4b57-8c70-597c574bc2b7)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/006be1dc-888f-4173-bcd8-ae7773543c22)
+![image](https://github.com/MhmoudYahia/Natours-App/assets/94763036/22849469-d8a7-41b4-aa63-691e3323813d)
 
 ## Run Locally
 
@@ -51,49 +93,9 @@ Start the server
 ```
 
 
-## Appendix
-
-Any additional information goes here
-
-
-## Features
-
-- Good authentication using JWT and cookies
-- Forget Password Form
-- Verification password using email
-- payment integration using Paypal 
-- Admin panel to  manage tours and users
-- User can change his password using email verification
-- Rating is calculated automatically when a user adds a review
-- User can upload and change  his photo
-- Live previews
-- Fullscreen mode
-- Cross platform
-- More
-
-
 ## Authors
 
 - [@MhmoudYahia](https://github.com/MhmoudYahia)
-
-
-## API Reference
-
-#### Get all items
-
-```http
-  GET /api/v1/tours
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` |You can get all tours, create new ones, and edit and delete tours. There are also special endpoints for some special requirements.|
-
-
-
-#### See Full API Documentation on Postman [here](https://documenter.getpostman.com/view/23936176/2s946fdsZJ)
-
-
 
 
 ## Found a bug?
