@@ -19,17 +19,19 @@ A quick tour in the app [here](https://drive.google.com/file/d/1CSIBTy8cjZFAuN0_
 
 ## Features
 
-- Good authentication using JWT and cookies
-- Forget Password Form
-- Verification password using email
-- payment integration using Paypal 
+- Advanced authentication and authorization (including password reset)
+- Master the entire modern back-end stack: Node, Express, MongoDB and Mongoose (MongoDB JS driver)
+- Build a fast, scalable, feature-rich RESTful API (includes filters, sorts, pagination, and much more
+- CRUD operations with MongoDB and Mongoose 
 - Admin panel to  manage tours and users
-- User can change his password using email verification
+- How to work with data in NoSQL databases (including geospatial data)
 - Rating is calculated automatically when a user adds a review
-- User can upload and change  his photo
-- Live previews
-- Fullscreen mode
-- Cross platform
+- Security: encryption, sanitization, rate limiting, etc
+- Credit card payments with Stripe
+- Security: encryption, sanitization, rate limiting, etc
+- Deep dive into mongoose (including all advanced features)
+- Sending emails & uploading files
+- Advanced error handling workflows
 - More
   
 ## API Reference
