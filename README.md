@@ -105,4 +105,4 @@ If you find any bugs in the projects not listed in the issues panel. Then feel f
 
 ## 🤖 Feedback
 
-If you have any feedback, please reach out to me at thebluemoonsea@gmail.com
+If you have any feedback, please reach out to me at myehia162@gmail.com
