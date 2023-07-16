@@ -19,7 +19,7 @@ export const Navbar = () => {
   const [alertInfo, setAlertInfo] = React.useState({});
 
   const { loading, status, data, message } = useFetch(
-    '/api/v1/users/isLoggedIn'
+    'http://localhost:1444/api/v1/users/isLoggedIn'
   );
   useEffect(() => {
     if (status === 'success') {

@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node server.js",
-    "start:dev" :"nodemon server.js",
+    "start:dev": "nodemon server.js",
     "start:prod": "SET NODE_ENV=production & nodemon server.js",
     "debug": "ndb server.js"
   },
@@ -12,6 +12,7 @@
   "author": "mahmoud yahia",
   "license": "ISC",
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.1.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "compression": "^1.7.4",

@@ -34,7 +34,7 @@ export const BodyTours = () => {
   }, []);
 
   const { status, data, message, loading } = useFetch(
-    `/api/v1/tours/${filterBody}`
+    `  http://localhost:1444/api/v1/tours/${filterBody}`
   );
   if (loading) {
     return (
@@ -138,7 +138,7 @@ const StatsTable = () => {
     data: stats,
     message,
     loading,
-  } = useFetch(`/api/v1/tours/tour-stats`);
+  } = useFetch(`http://localhost:1444/api/v1/tours/tour-stats`);
 
   return (
     <Box>

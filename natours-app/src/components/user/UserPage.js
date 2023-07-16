@@ -76,7 +76,7 @@ export const UserPage = () => {
     formData.append('email', email);
     if (photoFile) formData.append('photo', photoFile);
     // In JavaScript, FormData is a built-in object that provides an easy way to construct and send data in multipart/form-data format. This format is commonly used to submit forms that contain files or binary data to a server.
-
+console.log(name, email, photoFile);
     try {
       const { message, data, status, loading } = await fetchWrapper(
         '/users/updateMyData',

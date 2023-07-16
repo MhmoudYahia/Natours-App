@@ -54,7 +54,7 @@ export const SignIn = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     try {
-      const res = await fetch('/api/v1/users/login', {
+      const res = await fetch('http://localhost:1444/api/v1/users/login', {
         method: 'POST',
         headers: {
           // Accept: "application/json",

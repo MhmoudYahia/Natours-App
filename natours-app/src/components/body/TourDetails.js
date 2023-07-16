@@ -54,7 +54,7 @@ export const TourDetails = () => {
     loading,
     user,
     booked,
-  } = useFetch(`/api/v1/tours/${id}`);
+  } = useFetch(`http://localhost:1444/api/v1/tours/${id}`);
 
   //check inly after setSelectedDate && git rid of 2 rendering
   useEffect(() => {

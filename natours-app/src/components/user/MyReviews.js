@@ -84,14 +84,14 @@ export const MyReviewsPage = () => {
 
   const handleEditSubmit = async (event) => {
     event.preventDefault();
+    let editedReview = {};
+    if(editRating) editedReview.rating = editRating;
+    if(editText) editedReview.review = editText;
     try {
       const { message, data, status, loading } = await fetchWrapper(
         `/reviews/${editing}`,
         'PATCH',
-        JSON.stringify({
-          rating: editRating,
-          review: editText,
-        }),
+        JSON.stringify(editedReview),
         { 'Content-Type': 'application/json' }
       );
       if (status === 'success') {

@@ -121,7 +121,7 @@ export const Paypal = ({
       >
         <PayPalButtons
           forceReRender={[amount, selectedDate]}
-          disabled={disabled || disabledButtons}
+          // disabled={disabled || disabledButtons}
           // style={{ layout: 'vertical' }}
           createOrder={creatOrder}
           onApprove={onApprove}

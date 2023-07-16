@@ -51,7 +51,7 @@ exports.resizePhoto = async(req, res, next) => {
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
     .toFile(
-      `F:/MyRepos/Natours-App/Server-side/natours-app/public/img/users/${req.file.filename}`
+      `F:/MyRepos/Natours-App/natours-app/public/img/users/${req.file.filename}`
     );
 
   next();
